@@ -1,0 +1,11 @@
+{
+  "root": "dist/apps/game-critics/",
+  "routes": {
+    "/**/*.html": "index.html"
+  },
+  "proxies": {
+    "/api/": {
+      "origin": "https://game-critics-api.herokuapp.com/api/"
+    }
+  }
+}
