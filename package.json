@@ -2,10 +2,13 @@
   "name": "game-critics",
   "version": "0.0.0",
   "license": "MIT",
+  "engines":{
+    "node": "18.x"
+  },
   "scripts": {
     "ng": "nx",
     "postinstall": "node ./decorate-angular-cli.js",
-    "start": "nx serve",
+    "start": "node dist/apps/api/main",
     "build": "nx build",
     "test": "nx test"
   },
@@ -22,6 +25,7 @@
     "@nestjs/common": "^9.0.0",
     "@nestjs/core": "^9.0.0",
     "@nestjs/platform-express": "^9.0.0",
+    "@nestjs/serve-static": "^3.0.0",
     "@nrwl/angular": "15.0.13",
     "reflect-metadata": "^0.1.13",
     "rxjs": "^7.0.0",
