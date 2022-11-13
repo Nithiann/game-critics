@@ -9,7 +9,7 @@ import { join } from 'path'; // <- INSERT LINE
   imports: [
      // BEGIN INSERT
      ServeStaticModule.forRoot({
-      rootPath: join(__dirname, '..', 'nx-app'),
+      rootPath: join(__dirname, '..', 'game-critics'),
       exclude: ['/api*']
     })
     // END INSERT
