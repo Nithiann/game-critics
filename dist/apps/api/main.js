@@ -44,24 +44,30 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.AppModule = void 0;
 const tslib_1 = __webpack_require__("tslib");
 const common_1 = __webpack_require__("@nestjs/common");
+const mongoose_1 = __webpack_require__("@nestjs/mongoose");
 const app_controller_1 = __webpack_require__("./apps/api/src/app/app.controller.ts");
 const app_service_1 = __webpack_require__("./apps/api/src/app/app.service.ts");
 const serve_static_1 = __webpack_require__("@nestjs/serve-static"); // <- INSERT LINE
 const path_1 = __webpack_require__("path"); // <- INSERT LINE
+const user_service_1 = __webpack_require__("./apps/api/src/app/user/user.service.ts");
+const user_controller_1 = __webpack_require__("./apps/api/src/app/user/user.controller.ts");
+const environment_1 = __webpack_require__("./apps/api/src/environments/environment.ts");
+//`mongodb+srv://${process.env.MONGO_USR}:${process.env.MONGO_PWD}@${process.env.MONGO_HOST}/${process.env.MONGO_DATABASE}?retryWrites=true&w=majority`
 let AppModule = class AppModule {
 };
 AppModule = tslib_1.__decorate([
     (0, common_1.Module)({
         imports: [
+            mongoose_1.MongooseModule.forRoot(environment_1.environment.mongodb_uri),
             // BEGIN INSERT
             serve_static_1.ServeStaticModule.forRoot({
-                rootPath: (0, path_1.join)(__dirname, '..', 'nx-app'),
-                exclude: ['/api*']
-            })
+                rootPath: (0, path_1.join)(__dirname, '..', 'game-critics'),
+                exclude: ['/api*'],
+            }),
             // END INSERT
         ],
-        controllers: [app_controller_1.AppController],
-        providers: [app_service_1.AppService],
+        controllers: [app_controller_1.AppController, user_controller_1.UserController],
+        providers: [app_service_1.AppService, user_service_1.UserService],
     })
 ], AppModule);
 exports.AppModule = AppModule;
@@ -90,6 +96,56 @@ exports.AppService = AppService;
 
 /***/ }),
 
+/***/ "./apps/api/src/app/user/user.controller.ts":
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.UserController = void 0;
+const tslib_1 = __webpack_require__("tslib");
+const common_1 = __webpack_require__("@nestjs/common");
+let UserController = class UserController {
+};
+UserController = tslib_1.__decorate([
+    (0, common_1.Controller)('user')
+], UserController);
+exports.UserController = UserController;
+
+
+/***/ }),
+
+/***/ "./apps/api/src/app/user/user.service.ts":
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.UserService = void 0;
+const tslib_1 = __webpack_require__("tslib");
+const common_1 = __webpack_require__("@nestjs/common");
+let UserService = class UserService {
+};
+UserService = tslib_1.__decorate([
+    (0, common_1.Injectable)()
+], UserService);
+exports.UserService = UserService;
+
+
+/***/ }),
+
+/***/ "./apps/api/src/environments/environment.ts":
+/***/ ((__unused_webpack_module, exports) => {
+
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.environment = void 0;
+exports.environment = {
+    production: false,
+    mongodb_uri: `mongodb://${process.env.MONGO_HOST}/${process.env.MONGO_DATABASE}?retryWrites=true&w=majority`
+};
+
+
+/***/ }),
+
 /***/ "./libs/api-interfaces/src/index.ts":
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
@@ -106,6 +162,12 @@ tslib_1.__exportStar(__webpack_require__("./libs/api-interfaces/src/lib/api-inte
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
+var userRole;
+(function (userRole) {
+    userRole[userRole["user"] = 0] = "user";
+    userRole[userRole["reviewer"] = 1] = "reviewer";
+    userRole[userRole["admin"] = 2] = "admin";
+})(userRole || (userRole = {}));
 
 
 /***/ }),
@@ -121,6 +183,13 @@ module.exports = require("@nestjs/common");
 /***/ ((module) => {
 
 module.exports = require("@nestjs/core");
+
+/***/ }),
+
+/***/ "@nestjs/mongoose":
+/***/ ((module) => {
+
+module.exports = require("@nestjs/mongoose");
 
 /***/ }),
 
