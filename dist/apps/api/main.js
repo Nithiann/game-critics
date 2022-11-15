@@ -236,14 +236,43 @@ exports.IdentitySchema = mongoose_1.SchemaFactory.createForClass(Identity);
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
+var _a, _b, _c;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.UserController = void 0;
 const tslib_1 = __webpack_require__("tslib");
 const common_1 = __webpack_require__("@nestjs/common");
+const user_service_1 = __webpack_require__("./apps/api/src/app/user/user.service.ts");
 let UserController = class UserController {
+    constructor(userService) {
+        this.userService = userService;
+    }
+    getAll() {
+        return tslib_1.__awaiter(this, void 0, void 0, function* () {
+            return this.userService.getAll();
+        });
+    }
+    getOne(id) {
+        return tslib_1.__awaiter(this, void 0, void 0, function* () {
+            return this.userService.getOne(id);
+        });
+    }
 };
+tslib_1.__decorate([
+    (0, common_1.Get)(),
+    tslib_1.__metadata("design:type", Function),
+    tslib_1.__metadata("design:paramtypes", []),
+    tslib_1.__metadata("design:returntype", typeof (_b = typeof Promise !== "undefined" && Promise) === "function" ? _b : Object)
+], UserController.prototype, "getAll", null);
+tslib_1.__decorate([
+    (0, common_1.Get)(':id'),
+    tslib_1.__param(0, (0, common_1.Param)('id')),
+    tslib_1.__metadata("design:type", Function),
+    tslib_1.__metadata("design:paramtypes", [String]),
+    tslib_1.__metadata("design:returntype", typeof (_c = typeof Promise !== "undefined" && Promise) === "function" ? _c : Object)
+], UserController.prototype, "getOne", null);
 UserController = tslib_1.__decorate([
-    (0, common_1.Controller)('user')
+    (0, common_1.Controller)('user'),
+    tslib_1.__metadata("design:paramtypes", [typeof (_a = typeof user_service_1.UserService !== "undefined" && user_service_1.UserService) === "function" ? _a : Object])
 ], UserController);
 exports.UserController = UserController;
 
@@ -351,12 +380,12 @@ let UserService = class UserService {
     }
     getAll() {
         return tslib_1.__awaiter(this, void 0, void 0, function* () {
-            return this.userModel.find();
+            return this.userModel.find().exec();
         });
     }
     getOne(id) {
         return tslib_1.__awaiter(this, void 0, void 0, function* () {
-            return this.userModel.findOne({ _id: id });
+            return this.userModel.findOne({ _id: id }).exec();
         });
     }
 };

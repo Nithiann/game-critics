@@ -10,10 +10,10 @@ export class UserService {
   ) {}
 
   async getAll(): Promise<UserModel[]> {
-    return this.userModel.find()
+    return this.userModel.find().exec()
   }
 
   async getOne(id): Promise<UserModel> {
-    return this.userModel.findOne({_id: id})
+    return this.userModel.findOne({_id: id}).exec()
   }
 }
