@@ -2,36 +2,32 @@
 /******/ 	"use strict";
 /******/ 	var __webpack_modules__ = ({
 
-/***/ "./apps/api/src/app/app.controller.ts":
+/***/ "./apps/api/src/app/api.module.ts":
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
-var _a, _b;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.AppController = void 0;
+exports.ApiModule = void 0;
 const tslib_1 = __webpack_require__("tslib");
 const common_1 = __webpack_require__("@nestjs/common");
-const api_interfaces_1 = __webpack_require__("./libs/api-interfaces/src/index.ts");
-const app_service_1 = __webpack_require__("./apps/api/src/app/app.service.ts");
-let AppController = class AppController {
-    constructor(appService) {
-        this.appService = appService;
-    }
-    getData() {
-        return this.appService.getData();
-    }
+const mongoose_1 = __webpack_require__("@nestjs/mongoose");
+const user_controller_1 = __webpack_require__("./apps/api/src/app/user/user.controller.ts");
+const user_schema_1 = __webpack_require__("./apps/api/src/app/user/user.schema.ts");
+const user_service_1 = __webpack_require__("./apps/api/src/app/user/user.service.ts");
+let ApiModule = class ApiModule {
 };
-tslib_1.__decorate([
-    (0, common_1.Get)('hello'),
-    tslib_1.__metadata("design:type", Function),
-    tslib_1.__metadata("design:paramtypes", []),
-    tslib_1.__metadata("design:returntype", typeof (_b = typeof api_interfaces_1.Message !== "undefined" && api_interfaces_1.Message) === "function" ? _b : Object)
-], AppController.prototype, "getData", null);
-AppController = tslib_1.__decorate([
-    (0, common_1.Controller)(),
-    tslib_1.__metadata("design:paramtypes", [typeof (_a = typeof app_service_1.AppService !== "undefined" && app_service_1.AppService) === "function" ? _a : Object])
-], AppController);
-exports.AppController = AppController;
+ApiModule = tslib_1.__decorate([
+    (0, common_1.Module)({
+        imports: [
+            mongoose_1.MongooseModule.forFeature([
+                { name: user_schema_1.User.name, schema: user_schema_1.UserSchema }
+            ])
+        ],
+        controllers: [user_controller_1.UserController],
+        providers: [user_service_1.UserService]
+    })
+], ApiModule);
+exports.ApiModule = ApiModule;
 
 
 /***/ }),
@@ -45,29 +41,37 @@ exports.AppModule = void 0;
 const tslib_1 = __webpack_require__("tslib");
 const common_1 = __webpack_require__("@nestjs/common");
 const mongoose_1 = __webpack_require__("@nestjs/mongoose");
-const app_controller_1 = __webpack_require__("./apps/api/src/app/app.controller.ts");
-const app_service_1 = __webpack_require__("./apps/api/src/app/app.service.ts");
 const serve_static_1 = __webpack_require__("@nestjs/serve-static"); // <- INSERT LINE
 const path_1 = __webpack_require__("path"); // <- INSERT LINE
-const user_service_1 = __webpack_require__("./apps/api/src/app/user/user.service.ts");
-const user_controller_1 = __webpack_require__("./apps/api/src/app/user/user.controller.ts");
 const environment_1 = __webpack_require__("./apps/api/src/environments/environment.ts");
-//`mongodb+srv://${process.env.MONGO_USR}:${process.env.MONGO_PWD}@${process.env.MONGO_HOST}/${process.env.MONGO_DATABASE}?retryWrites=true&w=majority`
+const auth_module_1 = __webpack_require__("./apps/api/src/app/auth/auth.module.ts");
+const api_module_1 = __webpack_require__("./apps/api/src/app/api.module.ts");
+const core_1 = __webpack_require__("@nestjs/core");
 let AppModule = class AppModule {
 };
 AppModule = tslib_1.__decorate([
     (0, common_1.Module)({
         imports: [
             mongoose_1.MongooseModule.forRoot(environment_1.environment.mongodb_uri),
-            // BEGIN INSERT
             serve_static_1.ServeStaticModule.forRoot({
                 rootPath: (0, path_1.join)(__dirname, '..', 'game-critics'),
                 exclude: ['/api*'],
             }),
-            // END INSERT
+            auth_module_1.AuthModule,
+            api_module_1.ApiModule,
+            core_1.RouterModule.register([
+                {
+                    path: 'auth',
+                    module: auth_module_1.AuthModule
+                },
+                {
+                    path: 'api',
+                    module: api_module_1.ApiModule
+                }
+            ])
         ],
-        controllers: [app_controller_1.AppController, user_controller_1.UserController],
-        providers: [app_service_1.AppService, user_service_1.UserService],
+        controllers: [],
+        providers: [],
     })
 ], AppModule);
 exports.AppModule = AppModule;
@@ -75,23 +79,155 @@ exports.AppModule = AppModule;
 
 /***/ }),
 
-/***/ "./apps/api/src/app/app.service.ts":
+/***/ "./apps/api/src/app/auth/auth.controller.ts":
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+
+var _a, _b, _c;
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.AuthController = void 0;
+const tslib_1 = __webpack_require__("tslib");
+const api_interfaces_1 = __webpack_require__("./libs/api-interfaces/src/index.ts");
+const common_1 = __webpack_require__("@nestjs/common");
+const auth_service_1 = __webpack_require__("./apps/api/src/app/auth/auth.service.ts");
+let AuthController = class AuthController {
+    constructor(authService) {
+        this.authService = authService;
+    }
+    register(userCredits) {
+        return tslib_1.__awaiter(this, void 0, void 0, function* () {
+            try {
+                yield this.authService.registerUser(userCredits.email, userCredits.password);
+                return {
+                    id: yield this.authService.createUser(userCredits.email, userCredits.displayName, userCredits.firstName, userCredits.lastName, userCredits.age)
+                };
+            }
+            catch (e) {
+                common_1.Logger.error(e);
+                throw new common_1.HttpException('Data invalid', common_1.HttpStatus.BAD_REQUEST);
+            }
+        });
+    }
+};
+tslib_1.__decorate([
+    (0, common_1.Post)('register'),
+    tslib_1.__param(0, (0, common_1.Body)()),
+    tslib_1.__metadata("design:type", Function),
+    tslib_1.__metadata("design:paramtypes", [typeof (_b = typeof api_interfaces_1.userRegistration !== "undefined" && api_interfaces_1.userRegistration) === "function" ? _b : Object]),
+    tslib_1.__metadata("design:returntype", typeof (_c = typeof Promise !== "undefined" && Promise) === "function" ? _c : Object)
+], AuthController.prototype, "register", null);
+AuthController = tslib_1.__decorate([
+    (0, common_1.Controller)(),
+    tslib_1.__metadata("design:paramtypes", [typeof (_a = typeof auth_service_1.AuthService !== "undefined" && auth_service_1.AuthService) === "function" ? _a : Object])
+], AuthController);
+exports.AuthController = AuthController;
+
+
+/***/ }),
+
+/***/ "./apps/api/src/app/auth/auth.module.ts":
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.AppService = void 0;
+exports.AuthModule = void 0;
 const tslib_1 = __webpack_require__("tslib");
 const common_1 = __webpack_require__("@nestjs/common");
-let AppService = class AppService {
-    getData() {
-        return { message: 'Welcome to api!' };
+const mongoose_1 = __webpack_require__("@nestjs/mongoose");
+const user_schema_1 = __webpack_require__("./apps/api/src/app/user/user.schema.ts");
+const identity_schema_1 = __webpack_require__("./apps/api/src/app/auth/identity.schema.ts");
+const auth_service_1 = __webpack_require__("./apps/api/src/app/auth/auth.service.ts");
+const auth_controller_1 = __webpack_require__("./apps/api/src/app/auth/auth.controller.ts");
+let AuthModule = class AuthModule {
+};
+AuthModule = tslib_1.__decorate([
+    (0, common_1.Module)({
+        imports: [
+            mongoose_1.MongooseModule.forFeature([
+                { name: identity_schema_1.Identity.name, schema: identity_schema_1.IdentitySchema },
+                { name: user_schema_1.User.name, schema: user_schema_1.UserSchema },
+            ]),
+        ],
+        controllers: [auth_controller_1.AuthController],
+        providers: [auth_service_1.AuthService],
+    })
+], AuthModule);
+exports.AuthModule = AuthModule;
+
+
+/***/ }),
+
+/***/ "./apps/api/src/app/auth/auth.service.ts":
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+
+var _a, _b;
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.AuthService = void 0;
+const tslib_1 = __webpack_require__("tslib");
+const common_1 = __webpack_require__("@nestjs/common");
+const mongoose_1 = __webpack_require__("@nestjs/mongoose");
+const bcrypt_1 = __webpack_require__("bcrypt");
+const mongoose_2 = __webpack_require__("mongoose");
+const user_schema_1 = __webpack_require__("./apps/api/src/app/user/user.schema.ts");
+const identity_schema_1 = __webpack_require__("./apps/api/src/app/auth/identity.schema.ts");
+let AuthService = class AuthService {
+    constructor(identityModel, userModel) {
+        this.identityModel = identityModel;
+        this.userModel = userModel;
+    }
+    createUser(email, displayName, firstName, lastName, age) {
+        return tslib_1.__awaiter(this, void 0, void 0, function* () {
+            const user = new this.userModel({ email, displayName, firstName, lastName, age });
+            yield user.save();
+            return user.id;
+        });
+    }
+    registerUser(email, password) {
+        return tslib_1.__awaiter(this, void 0, void 0, function* () {
+            const generatedHash = yield (0, bcrypt_1.hash)(password, parseInt(process.env.SALT_ROUNDS, 10));
+            const identity = new this.identityModel({ email, hash: generatedHash });
+            yield identity.save();
+        });
     }
 };
-AppService = tslib_1.__decorate([
-    (0, common_1.Injectable)()
-], AppService);
-exports.AppService = AppService;
+AuthService = tslib_1.__decorate([
+    (0, common_1.Injectable)(),
+    tslib_1.__param(0, (0, mongoose_1.InjectModel)(identity_schema_1.Identity.name)),
+    tslib_1.__param(1, (0, mongoose_1.InjectModel)(user_schema_1.User.name)),
+    tslib_1.__metadata("design:paramtypes", [typeof (_a = typeof mongoose_2.Model !== "undefined" && mongoose_2.Model) === "function" ? _a : Object, typeof (_b = typeof mongoose_2.Model !== "undefined" && mongoose_2.Model) === "function" ? _b : Object])
+], AuthService);
+exports.AuthService = AuthService;
+
+
+/***/ }),
+
+/***/ "./apps/api/src/app/auth/identity.schema.ts":
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.IdentitySchema = exports.Identity = void 0;
+const tslib_1 = __webpack_require__("tslib");
+const mongoose_1 = __webpack_require__("@nestjs/mongoose");
+let Identity = class Identity {
+};
+tslib_1.__decorate([
+    (0, mongoose_1.Prop)({
+        required: true,
+        unique: true,
+    }),
+    tslib_1.__metadata("design:type", String)
+], Identity.prototype, "email", void 0);
+tslib_1.__decorate([
+    (0, mongoose_1.Prop)({ required: true }),
+    tslib_1.__metadata("design:type", String)
+], Identity.prototype, "hash", void 0);
+Identity = tslib_1.__decorate([
+    (0, mongoose_1.Schema)()
+], Identity);
+exports.Identity = Identity;
+exports.IdentitySchema = mongoose_1.SchemaFactory.createForClass(Identity);
 
 
 /***/ }),
@@ -114,18 +250,120 @@ exports.UserController = UserController;
 
 /***/ }),
 
+/***/ "./apps/api/src/app/user/user.schema.ts":
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+
+var _a;
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.UserSchema = exports.User = void 0;
+const tslib_1 = __webpack_require__("tslib");
+const mongoose_1 = __webpack_require__("@nestjs/mongoose");
+const uuid_1 = __webpack_require__("uuid");
+var UserRole;
+(function (UserRole) {
+    UserRole[UserRole["user"] = 0] = "user";
+    UserRole[UserRole["reviewer"] = 1] = "reviewer";
+    UserRole[UserRole["admin"] = 2] = "admin";
+})(UserRole || (UserRole = {}));
+let User = class User {
+};
+tslib_1.__decorate([
+    (0, mongoose_1.Prop)({ default: uuid_1.v4, index: true }),
+    tslib_1.__metadata("design:type", String)
+], User.prototype, "id", void 0);
+tslib_1.__decorate([
+    (0, mongoose_1.Prop)({
+        required: true,
+        unique: true,
+        validate: {
+            validator: function (v) {
+                const re = /^[\w-\\.]+@([\w-]+\.)+[\w-]{2,4}/;
+                return re.test(v);
+            }
+        }
+    }),
+    tslib_1.__metadata("design:type", String)
+], User.prototype, "email", void 0);
+tslib_1.__decorate([
+    (0, mongoose_1.Prop)({
+        required: true,
+        unique: true
+    }),
+    tslib_1.__metadata("design:type", String)
+], User.prototype, "displayName", void 0);
+tslib_1.__decorate([
+    (0, mongoose_1.Prop)({
+        required: true,
+    }),
+    tslib_1.__metadata("design:type", String)
+], User.prototype, "firstName", void 0);
+tslib_1.__decorate([
+    (0, mongoose_1.Prop)({
+        required: true,
+    }),
+    tslib_1.__metadata("design:type", String)
+], User.prototype, "lastName", void 0);
+tslib_1.__decorate([
+    (0, mongoose_1.Prop)({
+        required: true,
+    }),
+    tslib_1.__metadata("design:type", typeof (_a = typeof Date !== "undefined" && Date) === "function" ? _a : Object)
+], User.prototype, "age", void 0);
+tslib_1.__decorate([
+    (0, mongoose_1.Prop)({
+        required: true,
+        default: UserRole.user
+    }),
+    tslib_1.__metadata("design:type", Number)
+], User.prototype, "role", void 0);
+tslib_1.__decorate([
+    (0, mongoose_1.Prop)({
+        required: true,
+        default: 0
+    }),
+    tslib_1.__metadata("design:type", Number)
+], User.prototype, "user_score", void 0);
+User = tslib_1.__decorate([
+    (0, mongoose_1.Schema)()
+], User);
+exports.User = User;
+exports.UserSchema = mongoose_1.SchemaFactory.createForClass(User);
+
+
+/***/ }),
+
 /***/ "./apps/api/src/app/user/user.service.ts":
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
+var _a;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.UserService = void 0;
 const tslib_1 = __webpack_require__("tslib");
 const common_1 = __webpack_require__("@nestjs/common");
+const mongoose_1 = __webpack_require__("@nestjs/mongoose");
+const mongoose_2 = __webpack_require__("mongoose");
+const user_schema_1 = __webpack_require__("./apps/api/src/app/user/user.schema.ts");
 let UserService = class UserService {
+    constructor(userModel) {
+        this.userModel = userModel;
+    }
+    getAll() {
+        return tslib_1.__awaiter(this, void 0, void 0, function* () {
+            return this.userModel.find();
+        });
+    }
+    getOne(id) {
+        return tslib_1.__awaiter(this, void 0, void 0, function* () {
+            return this.userModel.findOne({ _id: id });
+        });
+    }
 };
 UserService = tslib_1.__decorate([
-    (0, common_1.Injectable)()
+    (0, common_1.Injectable)(),
+    tslib_1.__param(0, (0, mongoose_1.InjectModel)(user_schema_1.User.name)),
+    tslib_1.__metadata("design:paramtypes", [typeof (_a = typeof mongoose_2.Model !== "undefined" && mongoose_2.Model) === "function" ? _a : Object])
 ], UserService);
 exports.UserService = UserService;
 
@@ -140,7 +378,7 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.environment = void 0;
 exports.environment = {
     production: false,
-    mongodb_uri: `mongodb://${process.env.MONGO_HOST}/${process.env.MONGO_DATABASE}?retryWrites=true&w=majority`
+    mongodb_uri: `mongodb+srv://${process.env.MONGO_USR}:${process.env.MONGO_PWD}@${process.env.MONGO_HOST}/${process.env.MONGO_DATABASE}?retryWrites=true&w=majority`
 };
 
 
@@ -200,10 +438,31 @@ module.exports = require("@nestjs/serve-static");
 
 /***/ }),
 
+/***/ "bcrypt":
+/***/ ((module) => {
+
+module.exports = require("bcrypt");
+
+/***/ }),
+
+/***/ "mongoose":
+/***/ ((module) => {
+
+module.exports = require("mongoose");
+
+/***/ }),
+
 /***/ "tslib":
 /***/ ((module) => {
 
 module.exports = require("tslib");
+
+/***/ }),
+
+/***/ "uuid":
+/***/ ((module) => {
+
+module.exports = require("uuid");
 
 /***/ }),
 
@@ -255,14 +514,14 @@ const tslib_1 = __webpack_require__("tslib");
 const common_1 = __webpack_require__("@nestjs/common");
 const core_1 = __webpack_require__("@nestjs/core");
 const app_module_1 = __webpack_require__("./apps/api/src/app/app.module.ts");
+const environment_1 = __webpack_require__("./apps/api/src/environments/environment.ts");
 function bootstrap() {
     return tslib_1.__awaiter(this, void 0, void 0, function* () {
         const app = yield core_1.NestFactory.create(app_module_1.AppModule);
-        const globalPrefix = 'api';
-        app.setGlobalPrefix(globalPrefix);
         const port = process.env.PORT || 3333;
         yield app.listen(port);
-        common_1.Logger.log(`🚀 Application is running on: http://localhost:${port}/${globalPrefix}`);
+        console.log(environment_1.environment.mongodb_uri);
+        common_1.Logger.log(`🚀 Application is running on: http://localhost:${port}`);
     });
 }
 bootstrap();

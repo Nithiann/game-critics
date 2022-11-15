@@ -1,28 +1,33 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { ServeStaticModule } from '@nestjs/serve-static'; // <- INSERT LINE
 import { join } from 'path'; // <- INSERT LINE
-import { UserService } from './user/user.service';
-import { UserController } from './user/user.controller';
 import { environment } from '../environments/environment';
-
-//`mongodb+srv://${process.env.MONGO_USR}:${process.env.MONGO_PWD}@${process.env.MONGO_HOST}/${process.env.MONGO_DATABASE}?retryWrites=true&w=majority`
+import { AuthModule } from './auth/auth.module';
+import { ApiModule } from './api.module';
+import { RouterModule } from '@nestjs/core';
 
 @Module({
   imports: [
-    MongooseModule.forRoot(
-      environment.mongodb_uri
-    ),
-    // BEGIN INSERT
+    MongooseModule.forRoot(environment.mongodb_uri),
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, '..', 'game-critics'),
       exclude: ['/api*'],
     }),
-    // END INSERT
+    AuthModule,
+    ApiModule,
+    RouterModule.register([
+      {
+        path: 'auth',
+        module: AuthModule
+      },
+      {
+        path: 'api',
+        module: ApiModule
+      }
+    ])
   ],
-  controllers: [AppController, UserController],
-  providers: [AppService, UserService],
+  controllers: [],
+  providers: [],
 })
 export class AppModule {}

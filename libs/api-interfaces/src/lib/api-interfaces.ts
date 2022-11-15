@@ -8,15 +8,13 @@ enum userRole {
   admin
 }
 
-export interface User {
-  _id: string;
+export interface userRegistration {
   email: string;
+  displayName: string;
   password: string;
   firstName: string;
   lastName: string;
   age: Date;
-  role: userRole;
-  user_score: number;
 }
 
 export interface Review {
