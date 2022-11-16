@@ -16,4 +16,12 @@ export class UserService {
   async getOne(id): Promise<UserModel> {
     return this.userModel.findOne({_id: id}).exec()
   }
+
+  async updateSelf(id: string, body): Promise<UserModel> {
+    return this.userModel.findByIdAndUpdate({_id: id}, body)
+  }
+
+  async deleteById(id: string): Promise<UserModel> {
+    return this.userModel.findByIdAndDelete({_id: id});
+  }
 }
