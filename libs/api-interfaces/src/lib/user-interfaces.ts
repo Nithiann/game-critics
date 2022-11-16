@@ -20,3 +20,7 @@ export interface updateUserInfo {
   lastName: string;
   age: Date;
 }
+
+export interface userInfo {
+  id: string;
+}

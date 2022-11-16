@@ -1,5 +1,6 @@
-import { userRegistration } from '@game-critics/api-interfaces';
+
 import { Body, Controller, HttpException, HttpStatus, Logger, Post } from '@nestjs/common';
+import { userInfo, userRegistration } from '@game-critics/api-interfaces';
 import { AuthService } from './auth.service';
 
 @Controller()
@@ -8,7 +9,7 @@ export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   @Post('register')
-  async register(@Body() userCredits: userRegistration) : Promise<any> {
+  async register(@Body() userCredits: userRegistration) : Promise<userInfo> {
     try {
       await this.authService.registerUser(userCredits.email, userCredits.password);
       return {
