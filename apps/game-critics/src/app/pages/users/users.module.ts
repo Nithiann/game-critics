@@ -5,6 +5,7 @@ import { UserOverviewComponent } from './user-overview/user-overview.component';
 import { UserRegistrationComponent } from './user-registration/user-registration.component';
 import { UserRoutingModule } from './user-routing.module';
 import {TableModule} from 'primeng/table';
+import {ButtonModule} from 'primeng/button';
 
 @NgModule({
   declarations: [
@@ -15,7 +16,8 @@ import {TableModule} from 'primeng/table';
     CommonModule,
     HttpClientModule,
     UserRoutingModule,
-    TableModule
+    TableModule,
+    ButtonModule
   ],
 })
 export class UsersModule {}
