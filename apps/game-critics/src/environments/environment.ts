@@ -4,6 +4,12 @@
 
 export const environment = {
   production: false,
+  api: {
+    baseURL: '/api'
+  },
+  auth: {
+    baseUrl: '/auth'
+  }
 };
 
 /*

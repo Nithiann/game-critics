@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { CrudOperations } from './CrudOperations';
 
@@ -10,7 +10,7 @@ export abstract class CrudService<T, ID> implements CrudOperations<T, ID> {
 
   constructor(
     protected _http: HttpClient,
-    protected _base: string
+    @Inject(String) protected _base: string
   ) { }
 
   add(t: T): Observable<T> {
