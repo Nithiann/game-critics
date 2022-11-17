@@ -11,6 +11,7 @@ import {MenuItem, PrimeIcons} from 'primeng/api';
 export class NavbarComponent implements OnInit {
   menuItems: MenuItem[] = [];
 
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
   constructor() {}
 
   ngOnInit(): void {
@@ -26,11 +27,13 @@ export class NavbarComponent implements OnInit {
         items: [
           {
             label: 'New',
-            icon: 'pi pi-fw pi-user-plus'
+            icon: 'pi pi-fw pi-user-plus',
+            routerLink: '/users/new'
           },
           {
             label: 'Overview',
-            icon: 'pi pi-fw pi-table'
+            icon: 'pi pi-fw pi-table',
+            routerLink: '/users'
           }
         ]
       },
