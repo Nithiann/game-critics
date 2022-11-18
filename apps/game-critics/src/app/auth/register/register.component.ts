@@ -20,9 +20,8 @@ export class RegisterComponent implements OnInit {
 
   constructor(private service: AuthService) {}
 
-  ngOnInit(): void {
-
-  }
+  // eslint-disable-next-line @angular-eslint/no-empty-lifecycle-method, @typescript-eslint/no-empty-function
+  ngOnInit(): void {}
 
   onSubmit(user: userRegistration) {
     this.service.register(user)

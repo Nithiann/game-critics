@@ -1,0 +1,31 @@
+<div class="p-container">
+  <p-table [value]="games">
+    <ng-template pTemplate="header">
+      <tr>
+        <th>title</th>
+        <th>description</th>
+        <th>image</th>
+        <th>genres</th>
+        <th>score</th>
+        <th>Options</th>
+        <th><button routerLink="/verify/register" pButton type="button" icon="pi pi-fw pi-plus" class="p-button p-button-icon"></button></th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-game>
+      <tr>
+        <td>{{game.title}}</td>
+        <td>{{game.description}}</td>
+        <td>{{game.image}}</td>
+        <td>{{game.genre}}</td>
+        <td>{{game.score}}</td>
+        <td>
+          <div class="pi-container">
+            <button pButton type="button" icon="pi pi-fw pi-user-edit" class="p-button-warning p-button-icon"></button>
+            <button pButton type="button" icon="pi pi-fw pi-trash" class="p-button-danger  p-button-icon" (click)="handleDelete(game._id)"></button>
+          </div>
+        </td>
+        <td></td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>
