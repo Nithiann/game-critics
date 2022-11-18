@@ -5,12 +5,12 @@ enum userRole {
 }
 
 export interface userRegistration {
-  email: string;
-  displayName: string;
-  password: string;
-  firstName: string;
-  lastName: string;
-  age: Date;
+  email: string | null;
+  displayName: string | null;
+  password: string | null;
+  firstName: string | null;
+  lastName: string | null ;
+  age: Date | null;
 }
 
 export interface updateUserInfo {

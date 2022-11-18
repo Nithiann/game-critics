@@ -1,0 +1,35 @@
+<form [formGroup]="registerForm" (ngSubmit)="onSubmit(registerForm.getRawValue())">
+  <span class="p-float-label">
+    <input id="float-input" type="text" pInputText formControlName="email">
+    <label for="float-input">Email</label>
+  </span>
+
+  <span class="p-float-label">
+    <input id="float-input" type="text" pInputText formControlName="password">
+    <label for="float-input">Password</label>
+  </span>
+
+  <span class="p-float-label">
+    <input id="float-input" type="text" pInputText formControlName="displayName">
+    <label for="float-input">Display name</label>
+  </span>
+
+  <span class="p-float-label">
+    <input id="float-input" type="text" pInputText formControlName="firstName">
+    <label for="float-input">First name</label>
+  </span>
+
+  <span class="p-float-label">
+    <input id="float-input" type="text" pInputText formControlName="lastName">
+    <label for="float-input">Last name</label>
+  </span>
+
+  <span class="p-float-label">
+    <input id="float-input" type="text" pInputText formControlName="age">
+    <label for="float-input">Birthdate</label>
+  </span>
+
+  <p-calendar dateFormat="dd/mm/yy"></p-calendar>
+
+  <button pButton type="submit" label="Register" class="p-button-warning p-button-icon"></button>
+</form>

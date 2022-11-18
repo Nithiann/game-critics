@@ -12,6 +12,7 @@ import { AboutComponent } from './pages/about/about.component';
 import { RouterModule } from '@angular/router';
 import { AppRoutingModule } from './app-routing.module';
 import { UsersModule } from './pages/users/users.module';
+import { AuthModule } from './auth/auth.module';
 
 @NgModule({
   declarations: [
@@ -29,7 +30,8 @@ import { UsersModule } from './pages/users/users.module';
     RouterModule,
     AppRoutingModule,
     MenubarModule,
-    UsersModule
+    UsersModule,
+    AuthModule
   ],
   providers: [],
   bootstrap: [AppComponent],

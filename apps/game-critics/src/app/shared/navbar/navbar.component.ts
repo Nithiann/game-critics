@@ -28,7 +28,7 @@ export class NavbarComponent implements OnInit {
           {
             label: 'New',
             icon: 'pi pi-fw pi-user-plus',
-            routerLink: '/users/new'
+            routerLink: '/verify/register'
           },
           {
             label: 'Overview',

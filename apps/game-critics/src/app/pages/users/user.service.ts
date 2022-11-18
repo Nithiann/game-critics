@@ -12,5 +12,5 @@ export class UserService extends CrudService<userRegistration, string> {
 
   constructor(protected override _http: HttpClient) {
     super(_http, `${environment.api.baseURL}/user`)
-   }
+  }
 }

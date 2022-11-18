@@ -17,6 +17,8 @@ const user_service_1 = __webpack_require__("./apps/api/src/app/user/user.service
 const game_service_1 = __webpack_require__("./apps/api/src/app/game/game.service.ts");
 const game_controller_1 = __webpack_require__("./apps/api/src/app/game/game.controller.ts");
 const game_schema_1 = __webpack_require__("./apps/api/src/app/game/game.schema.ts");
+const auth_service_1 = __webpack_require__("./apps/api/src/app/auth/auth.service.ts");
+const identity_schema_1 = __webpack_require__("./apps/api/src/app/auth/identity.schema.ts");
 let ApiModule = class ApiModule {
 };
 ApiModule = tslib_1.__decorate([
@@ -24,11 +26,12 @@ ApiModule = tslib_1.__decorate([
         imports: [
             mongoose_1.MongooseModule.forFeature([
                 { name: user_schema_1.User.name, schema: user_schema_1.UserSchema },
-                { name: game_schema_1.Game.name, schema: game_schema_1.GameSchema }
+                { name: game_schema_1.Game.name, schema: game_schema_1.GameSchema },
+                { name: identity_schema_1.Identity.name, schema: identity_schema_1.IdentitySchema }
             ]),
         ],
         controllers: [user_controller_1.UserController, game_controller_1.GameController],
-        providers: [user_service_1.UserService, game_service_1.GameService],
+        providers: [user_service_1.UserService, game_service_1.GameService, auth_service_1.AuthService],
     })
 ], ApiModule);
 exports.ApiModule = ApiModule;
@@ -424,16 +427,18 @@ exports.GameService = GameService;
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
-var _a, _b, _c, _d, _e;
+var _a, _b, _c, _d, _e, _f, _g, _h;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.UserController = void 0;
 const tslib_1 = __webpack_require__("tslib");
 const common_1 = __webpack_require__("@nestjs/common");
 const user_service_1 = __webpack_require__("./apps/api/src/app/user/user.service.ts");
 const api_interfaces_1 = __webpack_require__("./libs/api-interfaces/src/index.ts");
+const auth_service_1 = __webpack_require__("./apps/api/src/app/auth/auth.service.ts");
 let UserController = class UserController {
-    constructor(userService) {
+    constructor(userService, authService) {
         this.userService = userService;
+        this.authService = authService;
     }
     getAll() {
         return tslib_1.__awaiter(this, void 0, void 0, function* () {
@@ -455,27 +460,41 @@ let UserController = class UserController {
             return this.userService.deleteById(id);
         });
     }
+    register(userCredits) {
+        return tslib_1.__awaiter(this, void 0, void 0, function* () {
+            try {
+                yield this.authService.registerUser(userCredits.email, userCredits.password);
+                return {
+                    id: yield this.authService.createUser(userCredits.email, userCredits.displayName, userCredits.firstName, userCredits.lastName, userCredits.age)
+                };
+            }
+            catch (e) {
+                common_1.Logger.error(e);
+                throw new common_1.HttpException('Data invalid', common_1.HttpStatus.BAD_REQUEST);
+            }
+        });
+    }
 };
 tslib_1.__decorate([
     (0, common_1.Get)(),
     tslib_1.__metadata("design:type", Function),
     tslib_1.__metadata("design:paramtypes", []),
-    tslib_1.__metadata("design:returntype", typeof (_b = typeof Promise !== "undefined" && Promise) === "function" ? _b : Object)
+    tslib_1.__metadata("design:returntype", typeof (_c = typeof Promise !== "undefined" && Promise) === "function" ? _c : Object)
 ], UserController.prototype, "getAll", null);
 tslib_1.__decorate([
     (0, common_1.Get)(':id'),
     tslib_1.__param(0, (0, common_1.Param)('id')),
     tslib_1.__metadata("design:type", Function),
     tslib_1.__metadata("design:paramtypes", [String]),
-    tslib_1.__metadata("design:returntype", typeof (_c = typeof Promise !== "undefined" && Promise) === "function" ? _c : Object)
+    tslib_1.__metadata("design:returntype", typeof (_d = typeof Promise !== "undefined" && Promise) === "function" ? _d : Object)
 ], UserController.prototype, "getOne", null);
 tslib_1.__decorate([
     (0, common_1.Put)(':id'),
     tslib_1.__param(0, (0, common_1.Param)('id')),
     tslib_1.__param(1, (0, common_1.Body)()),
     tslib_1.__metadata("design:type", Function),
-    tslib_1.__metadata("design:paramtypes", [String, typeof (_d = typeof api_interfaces_1.updateUserInfo !== "undefined" && api_interfaces_1.updateUserInfo) === "function" ? _d : Object]),
-    tslib_1.__metadata("design:returntype", typeof (_e = typeof Promise !== "undefined" && Promise) === "function" ? _e : Object)
+    tslib_1.__metadata("design:paramtypes", [String, typeof (_e = typeof api_interfaces_1.updateUserInfo !== "undefined" && api_interfaces_1.updateUserInfo) === "function" ? _e : Object]),
+    tslib_1.__metadata("design:returntype", typeof (_f = typeof Promise !== "undefined" && Promise) === "function" ? _f : Object)
 ], UserController.prototype, "updateSelf", null);
 tslib_1.__decorate([
     (0, common_1.Delete)(':id'),
@@ -484,9 +503,16 @@ tslib_1.__decorate([
     tslib_1.__metadata("design:paramtypes", [String]),
     tslib_1.__metadata("design:returntype", Promise)
 ], UserController.prototype, "deleteById", null);
+tslib_1.__decorate([
+    (0, common_1.Post)('register'),
+    tslib_1.__param(0, (0, common_1.Body)()),
+    tslib_1.__metadata("design:type", Function),
+    tslib_1.__metadata("design:paramtypes", [typeof (_g = typeof api_interfaces_1.userRegistration !== "undefined" && api_interfaces_1.userRegistration) === "function" ? _g : Object]),
+    tslib_1.__metadata("design:returntype", typeof (_h = typeof Promise !== "undefined" && Promise) === "function" ? _h : Object)
+], UserController.prototype, "register", null);
 UserController = tslib_1.__decorate([
     (0, common_1.Controller)('user'),
-    tslib_1.__metadata("design:paramtypes", [typeof (_a = typeof user_service_1.UserService !== "undefined" && user_service_1.UserService) === "function" ? _a : Object])
+    tslib_1.__metadata("design:paramtypes", [typeof (_a = typeof user_service_1.UserService !== "undefined" && user_service_1.UserService) === "function" ? _a : Object, typeof (_b = typeof auth_service_1.AuthService !== "undefined" && auth_service_1.AuthService) === "function" ? _b : Object])
 ], UserController);
 exports.UserController = UserController;
 

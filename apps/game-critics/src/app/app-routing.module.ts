@@ -17,6 +17,12 @@ const routes: Routes = [
           throw {loadChunkError: true}
         }
       )
+  },
+  {
+    path: 'verify',
+    loadChildren: () =>
+      import('./auth/auth.module')
+      .then((m) => m.AuthModule)
   }
 ]
 
