@@ -8,6 +8,7 @@ export interface updateGameInfo {
 }
 
 export interface gameRegistration {
+  id: string | null;
   title: string;
   description: string;
   image: string;

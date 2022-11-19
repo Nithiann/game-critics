@@ -17,10 +17,12 @@ export class GamesOverviewComponent implements OnInit {
     })
   }
 
-  handleDelete(id: string) {
+  handleDelete(id: string, game: gameRegistration) {
     this.service.delete(id)
       .subscribe((res) => {
-        window.location.reload();
+        const index = this.games.indexOf(game);
+        if (index !== -1)
+          this.games.splice(index, 1);
       });
   }
 }
