@@ -6,16 +6,19 @@ import { ButtonModule } from 'primeng/button';
 import { GamesRoutingModule } from './games-routing.module';
 import { GamesOverviewComponent } from './games-overview/games-overview.component';
 import { GameService } from './game.service';
+import { GameRegistrationComponent } from './game-registration/game-registration.component';
+import { ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
-  declarations: [GamesOverviewComponent],
+  declarations: [GamesOverviewComponent, GameRegistrationComponent],
   imports: [
     CommonModule,
     HttpClientModule,
     GamesRoutingModule,
     TableModule,
     ButtonModule,
+    ReactiveFormsModule
   ],
-  providers: [GameService]
+  providers: [GameService],
 })
 export class GamesModule {}

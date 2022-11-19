@@ -42,7 +42,8 @@ export class NavbarComponent implements OnInit {
         items: [
           {
             label: 'New',
-            icon: 'pi pi-fw pi-plus'
+            icon: 'pi pi-fw pi-plus',
+            routerLink: '/games/new'
           },
           {
             label: 'Overview',

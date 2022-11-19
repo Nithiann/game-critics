@@ -1,0 +1,20 @@
+<form [formGroup]="registerForm" (ngSubmit)="onSubmit(registerForm.getRawValue())">
+  <span class="p-float-label">
+    <input id="float-input" type="text" pInputText formControlName="title">
+    <label for="float-input">Title</label>
+  </span>
+  <span class="p-float-label">
+    <input id="float-input" type="text" pInputText formControlName="description">
+    <label for="float-input">Description</label>
+  </span>
+  <span class="p-float-label">
+    <input id="float-input" type="text" pInputText formControlName="image">
+    <label for="float-input">image</label>
+  </span>
+  <span class="p-float-label">
+    <input id="float-input" type="text" pInputText formControlName="genre">
+    <label for="float-input">Genres</label>
+  </span>
+
+  <button pButton type="submit" label="Create" class="p-button-warning p-button-icon"></button>
+</form>

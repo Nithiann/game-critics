@@ -9,9 +9,9 @@ export interface updateGameInfo {
 
 export interface gameRegistration {
   id: string | null;
-  title: string;
-  description: string;
-  image: string;
-  genre: [string];
-  score: number;
+  title: string | null;
+  description: string | null;
+  image: string | null;
+  genre: string[] | null;
+  score: number | null;
 }
