@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { PrimeNGConfig } from 'primeng/api';
 
 @Component({
   selector: 'game-critics-root',
@@ -7,5 +8,7 @@ import { HttpClient } from '@angular/common/http';
   styleUrls: ['./app.component.css'],
 })
 export class AppComponent {
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private primengConfig: PrimeNGConfig) {
+    this.primengConfig.ripple = true;
+  }
 }

@@ -12,15 +12,15 @@
       </tr>
     </ng-template>
     <ng-template pTemplate="body" let-game>
-      <tr routerLink="{{game._id}}">
-        <td>{{game.title}}</td>
+      <tr>
+        <td routerLink="/games/{{game._id}}" class="game-table-title"><b>{{game.title}}</b></td>
         <td>{{game.description}}</td>
         <td>{{game.image}}</td>
         <td>{{game.genre}}</td>
         <td>{{game.score}}</td>
         <td>
-          <div class="pi-container">
-            <button pButton type="button" icon="pi pi-fw pi-eye" class="p-button-warning p-button-icon" routerLink="update/{{game._id}}"></button>
+          <div class="container">
+            <button pButton type="button" icon="pi pi-fw pi-eye" class="p-button-warning p-button-icon" routerLink="/games/update/{{game._id}}"></button>
             <button pButton type="button" icon="pi pi-fw pi-trash" class="p-button-danger  p-button-icon" (click)="handleDelete(game._id, game)"></button>
           </div>
         </td>

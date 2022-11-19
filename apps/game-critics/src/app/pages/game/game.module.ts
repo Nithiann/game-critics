@@ -9,13 +9,18 @@ import { GameService } from './game.service';
 import { GameRegistrationComponent } from './game-registration/game-registration.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { GameDetailComponent } from './game-detail/game-detail.component';
-import {ImageModule} from 'primeng/image';
+import { ImageModule } from 'primeng/image';
+import { GameListComponent } from './game-list/game-list.component';
+import {DataViewModule} from 'primeng/dataview';
+import {CardModule} from 'primeng/card';
+import {RatingModule} from 'primeng/rating';
 
 @NgModule({
   declarations: [
     GamesOverviewComponent,
     GameRegistrationComponent,
     GameDetailComponent,
+    GameListComponent,
   ],
   imports: [
     CommonModule,
@@ -24,7 +29,10 @@ import {ImageModule} from 'primeng/image';
     TableModule,
     ButtonModule,
     ReactiveFormsModule,
-    ImageModule
+    ImageModule,
+    DataViewModule,
+    CardModule,
+    RatingModule
   ],
   providers: [GameService],
 })

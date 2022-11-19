@@ -1,0 +1,9 @@
+input {
+  margin: 1em;
+  width: 40%;
+  height: 4em;
+}
+
+input button {
+  margin: 1em;
+}

@@ -1,0 +1,11 @@
+.container {
+  display: block;
+}
+
+.container button {
+  margin: .5em;
+}
+
+.game-table-title {
+  cursor:pointer;
+}

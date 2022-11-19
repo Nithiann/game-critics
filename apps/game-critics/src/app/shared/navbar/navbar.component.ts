@@ -49,6 +49,11 @@ export class NavbarComponent implements OnInit {
             label: 'Overview',
             icon: 'pi pi-fw pi-table',
             routerLink: '/games'
+          },
+          {
+            label: 'admin',
+            icon: 'pi pi-fw pi-table',
+            routerLink: '/games/admin'
           }
         ]
       },

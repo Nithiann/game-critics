@@ -1,0 +1,7 @@
+.container {
+  display: block;
+}
+
+.container button {
+  margin: .5em;
+}

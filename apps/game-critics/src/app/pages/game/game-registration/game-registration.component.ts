@@ -39,9 +39,16 @@ export class GameRegistrationComponent implements OnInit {
     }
 
     onSubmit(game: gameRegistration) {
-      this.service.add(game)
+      if (this.id !== null) {
+        this.service.update(this.id, game)
         .subscribe((res) => {
-          console.log(res);
+          console.log(res)
         })
+      } else {
+        this.service.add(game)
+          .subscribe((res) => {
+            console.log(res);
+          })
+      }
     }
 }
