@@ -8,11 +8,11 @@
         <th>genres</th>
         <th>score</th>
         <th>Options</th>
-        <th><button routerLink="/verify/register" pButton type="button" icon="pi pi-fw pi-plus" class="p-button p-button-icon"></button></th>
+        <th><button routerLink="/games/new" pButton type="button" icon="pi pi-fw pi-plus" class="p-button p-button-icon"></button></th>
       </tr>
     </ng-template>
     <ng-template pTemplate="body" let-game>
-      <tr>
+      <tr routerLink="{{game._id}}">
         <td>{{game.title}}</td>
         <td>{{game.description}}</td>
         <td>{{game.image}}</td>
@@ -20,7 +20,7 @@
         <td>{{game.score}}</td>
         <td>
           <div class="pi-container">
-            <button pButton type="button" icon="pi pi-fw pi-user-edit" class="p-button-warning p-button-icon"></button>
+            <button pButton type="button" icon="pi pi-fw pi-eye" class="p-button-warning p-button-icon" routerLink="update/{{game._id}}"></button>
             <button pButton type="button" icon="pi pi-fw pi-trash" class="p-button-danger  p-button-icon" (click)="handleDelete(game._id, game)"></button>
           </div>
         </td>
