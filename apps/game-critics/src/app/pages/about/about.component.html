@@ -5,25 +5,20 @@
       Deze applicatie is gemaakt in het kader van het vak 'Clientside web
       frameworks' van Avans Hogeschool Breda.
     </p>
-    <h3>Naam van jouw project</h3>
+    <h3>Game-critics</h3>
     <p>
-      Hier beschrijft je wat je project inhoudt. Beschrijf ook de
-      entiteiten/domeinobjecten die je gebruikt, en benoem per entiteit de
-      attributen met hun datatype.
+      Een webapplicatie waar geregistreerde gebruikers reviews kunnen schrijven over games.
+      Hier kunnen reviewers en gamers samen komen om te zoeken naar iets nieuws om te spelen.
+      Met de hoeveelheid verschillende games is het soms moeilijk te kiezen wat je wilt spelen.
+      Om de keuze makkelijker te maken kunnen gebruikers reviews lezen om zo een spel te spelen dat de gebruiker het meest aanspreekt.
+      Mochten gebruikers iets aan te merken hebben op een review, kunnen ze dit ook commenten.
     </p>
   </div>
   <div class="col-sm-6 col-md-4 col-lg-3">
     <div class="card">
-      <div class="d-flex justify-content-center align-items-center">
-        <img
-          src="assets/images/person.png"
-          class="card-img-top rounded-circle border profile-pic"
-          alt="..."
-        />
-      </div>
       <div class="card-body">
-        <h5 class="card-title">Jouw naam hier</h5>
-        <p class="card-text">Studentnummer: 12345678</p>
+        <h5 class="card-title">Bas Voss</h5>
+        <p class="card-text">Studentnummer: 2152912</p>
       </div>
     </div>
   </div>
@@ -32,30 +27,51 @@
 <h3>Entiteiten</h3>
 <div class="row">
   <div class="col-sm-12 col-md-4">
-    <p>Entiteit 1</p>
+    <p>User</p>
     <ul>
-      <li>naam: string</li>
-      <li>id: number</li>
+      <li>id: string</li>
+      <li>displayName: string</li>
+      <li>firstName: string</li>
+      <li>lastName: string</li>
+      <li>email: string</li>
+      <li>password: string</li>
       <li>birthdate: date</li>
-      <li>isSelected: boolean</li>
+      <li>role: enum(user, reviewer, admin)</li>
+      <li>user_score: number</li>
     </ul>
   </div>
   <div class="col-sm-12 col-md-4">
-    <p>Entiteit 2</p>
+    <p>Game</p>
     <ul>
-      <li>naam: string</li>
-      <li>id: number</li>
-      <li>birthdate: date</li>
-      <li>isSelected: boolean</li>
+      <li>id: string</li>
+      <li>title: string</li>
+      <li>description: string</li>
+      <li>genre: [string...*]</li>
+      <li>score: int</li>
+      <li>reviews: [Reviews...*]</li>
     </ul>
   </div>
   <div class="col-sm-12 col-md-4">
-    <p>Entiteit 3</p>
+    <p>Review</p>
     <ul>
-      <li>naam: string</li>
-      <li>id: number</li>
-      <li>birthdate: date</li>
-      <li>isSelected: boolean</li>
+      <li>id: string</li>
+      <li>user_ref: string</li>
+      <li>description: string</li>
+      <li>created_at: dateTime</li>
+      <li>modified_at: dateTime</li>
+      <li>game_score: number(0-5)</li>
+      <li>review_score: number</li>
+      <li>comments: [Comments...*]</li>
+    </ul>
+  </div>
+  <div class="col-sm-12 col-md-4">
+    <p>Comment</p>
+    <ul>
+      <li>id: string</li>
+      <li>user_ref: string</li>
+      <li>description: string</li>
+      <li>Created_at: dateTime</li>
+      <li>modified_at: dateTime</li>
     </ul>
   </div>
 </div>

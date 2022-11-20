@@ -14,6 +14,8 @@ import { GameListComponent } from './game-list/game-list.component';
 import {DataViewModule} from 'primeng/dataview';
 import {CardModule} from 'primeng/card';
 import {RatingModule} from 'primeng/rating';
+import {MultiSelectModule} from 'primeng/multiselect';
+
 
 @NgModule({
   declarations: [
@@ -32,7 +34,8 @@ import {RatingModule} from 'primeng/rating';
     ImageModule,
     DataViewModule,
     CardModule,
-    RatingModule
+    RatingModule,
+    MultiSelectModule
   ],
   providers: [GameService],
 })

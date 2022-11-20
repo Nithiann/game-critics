@@ -1,20 +1,35 @@
-<form [formGroup]="registerForm" (ngSubmit)="onSubmit(registerForm.getRawValue())">
-  <span class="p-float-label">
-    <input id="float-input" type="text" pInputText formControlName="title">
-    <label for="float-input">Title</label>
-  </span>
-  <span class="p-float-label">
-    <input id="float-input" type="text" pInputText formControlName="description">
-    <label for="float-input">Description</label>
-  </span>
-  <span class="p-float-label">
-    <input id="float-input" type="text" pInputText formControlName="image">
-    <label for="float-input">image</label>
-  </span>
-  <span class="p-float-label">
-    <input id="float-input" type="text" pInputText formControlName="genre">
-    <label for="float-input">Genres</label>
-  </span>
+<div class="card">
+  <form [formGroup]="registerForm" (ngSubmit)="onSubmit(registerForm.getRawValue())" class="formgrid">
+    <h3>Register a game</h3>
+    <div class="field col-12">
+      <span class="p-float-label">
+        <input id="float-input" type="text" pInputText formControlName="title">
+        <label for="float-input">Title</label>
+      </span>
+    </div>
 
-  <button pButton type="submit" label="Create" class="p-button-warning p-button-icon"></button>
-</form>
+    <div class="field col-12">
+      <span class="p-float-label">
+        <input id="float-input" type="text" pInputText formControlName="description">
+        <label for="float-input">Description</label>
+      </span>
+    </div>
+
+    <div class="field col-12">
+      <span class="p-float-label">
+        <input id="float-input" type="text" pInputText formControlName="image">
+        <label for="float-input">image</label>
+      </span>
+    </div>
+
+    <div class="field col-6">
+      <label for="input">Genres</label>
+      <p-multiSelect class="multiselect" [options]="genres" formControlName="genre" defaultLabel="Select genres..."></p-multiSelect>
+    </div>
+
+  <div class="field col-12 md:col-6">
+    <button pButton type="submit" label="Create" class="p-button p-button-icon"></button>
+  </div>
+
+  </form>
+</div>

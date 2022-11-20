@@ -7,3 +7,10 @@ input {
 input button {
   margin: 1em;
 }
+
+.multiselect {
+  margin: 1em;
+  width: 2em;
+  height: 4em;
+  max-width: 100%;
+}

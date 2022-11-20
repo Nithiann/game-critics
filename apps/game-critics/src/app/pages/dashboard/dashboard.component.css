@@ -1,0 +1,10 @@
+button {
+  width: 40em;
+  height: 20em;
+  margin: 2em;
+  display: inline-block;
+}
+
+.card-container {
+  text-align: center;
+}

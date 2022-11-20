@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {MenubarModule} from 'primeng/menubar';
 import { AppComponent } from './app.component';
 import { NxWelcomeComponent } from './nx-welcome.component';
@@ -33,7 +34,8 @@ import { GamesModule } from './pages/game/game.module';
     MenubarModule,
     UsersModule,
     AuthModule,
-    GamesModule
+    GamesModule,
+    BrowserAnimationsModule
   ],
   providers: [],
   bootstrap: [AppComponent],

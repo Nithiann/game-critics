@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute, ParamMap } from '@angular/router';
+import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { gameRegistration } from '@game-critics/api-interfaces';
 import { GameService } from '../game.service';
 
@@ -10,6 +10,9 @@ import { GameService } from '../game.service';
   styleUrls: ['./game-registration.component.css'],
 })
 export class GameRegistrationComponent implements OnInit {
+  genres: string[] = [
+    "FPS", "RPG", "MMO", "Open-World", "Action", "Adventure", "Horror", "Casual", "Fighter", "Fantasy"
+  ]
   id!: string;
   game!: gameRegistration;
   registerForm = new FormGroup({
@@ -20,7 +23,7 @@ export class GameRegistrationComponent implements OnInit {
     genre: new FormControl([''], [Validators.required]),
     score: new FormControl(0, [Validators.required])
   });
-  constructor(private service: GameService, private route: ActivatedRoute) {}
+  constructor(private service: GameService, private route: ActivatedRoute, private router: Router) {}
 
     // eslint-disable-next-line @angular-eslint/no-empty-lifecycle-method, @typescript-eslint/no-empty-function
     ngOnInit(): void {
@@ -47,7 +50,7 @@ export class GameRegistrationComponent implements OnInit {
       } else {
         this.service.add(game)
           .subscribe((res) => {
-            console.log(res);
+            this.router.navigate(['/games'])
           })
       }
     }

@@ -8,6 +8,7 @@ import {InputTextModule} from 'primeng/inputtext';
 import {CalendarModule} from 'primeng/calendar';
 import {ButtonModule} from 'primeng/button';
 import { VerifyRoutingModule } from './verify-routing.module';
+import {PasswordModule} from 'primeng/password';
 
 @NgModule({
   declarations: [RegisterComponent],
@@ -18,7 +19,8 @@ import { VerifyRoutingModule } from './verify-routing.module';
     HttpClientModule,
     ReactiveFormsModule,
     InputTextModule,
-    CalendarModule
+    CalendarModule,
+    PasswordModule
   ],
   providers: [AuthService]
 })
