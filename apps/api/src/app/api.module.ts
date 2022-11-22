@@ -9,13 +9,15 @@ import { Game, GameSchema } from './game/game.schema';
 import { AuthService } from './auth/auth.service';
 import { Identity, IdentitySchema } from './auth/identity.schema';
 import { ReviewsService } from './reviews/reviews.service';
+import { Review, reviewSchema } from './reviews/reviews.schema';
 
 @Module({
   imports: [
     MongooseModule.forFeature([
       { name: User.name, schema: UserSchema },
       { name: Game.name, schema: GameSchema },
-      { name: Identity.name, schema: IdentitySchema}
+      { name: Identity.name, schema: IdentitySchema},
+      { name: Review.name, schema: reviewSchema }
     ]),
   ],
   controllers: [UserController, GameController],

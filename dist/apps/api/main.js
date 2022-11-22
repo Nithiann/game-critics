@@ -19,6 +19,8 @@ const game_controller_1 = __webpack_require__("./apps/api/src/app/game/game.cont
 const game_schema_1 = __webpack_require__("./apps/api/src/app/game/game.schema.ts");
 const auth_service_1 = __webpack_require__("./apps/api/src/app/auth/auth.service.ts");
 const identity_schema_1 = __webpack_require__("./apps/api/src/app/auth/identity.schema.ts");
+const reviews_service_1 = __webpack_require__("./apps/api/src/app/reviews/reviews.service.ts");
+const reviews_schema_1 = __webpack_require__("./apps/api/src/app/reviews/reviews.schema.ts");
 let ApiModule = class ApiModule {
 };
 ApiModule = tslib_1.__decorate([
@@ -27,11 +29,12 @@ ApiModule = tslib_1.__decorate([
             mongoose_1.MongooseModule.forFeature([
                 { name: user_schema_1.User.name, schema: user_schema_1.UserSchema },
                 { name: game_schema_1.Game.name, schema: game_schema_1.GameSchema },
-                { name: identity_schema_1.Identity.name, schema: identity_schema_1.IdentitySchema }
+                { name: identity_schema_1.Identity.name, schema: identity_schema_1.IdentitySchema },
+                { name: reviews_schema_1.Review.name, schema: reviews_schema_1.reviewSchema }
             ]),
         ],
         controllers: [user_controller_1.UserController, game_controller_1.GameController],
-        providers: [user_service_1.UserService, game_service_1.GameService, auth_service_1.AuthService],
+        providers: [user_service_1.UserService, game_service_1.GameService, auth_service_1.AuthService, reviews_service_1.ReviewsService],
     })
 ], ApiModule);
 exports.ApiModule = ApiModule;
@@ -243,16 +246,18 @@ exports.IdentitySchema = mongoose_1.SchemaFactory.createForClass(Identity);
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
-var _a, _b, _c, _d, _e, _f, _g;
+var _a, _b, _c, _d, _e, _f, _g, _h, _j;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.GameController = void 0;
 const tslib_1 = __webpack_require__("tslib");
 const api_interfaces_1 = __webpack_require__("./libs/api-interfaces/src/index.ts");
 const common_1 = __webpack_require__("@nestjs/common");
+const reviews_service_1 = __webpack_require__("./apps/api/src/app/reviews/reviews.service.ts");
 const game_service_1 = __webpack_require__("./apps/api/src/app/game/game.service.ts");
 let GameController = class GameController {
-    constructor(gameService) {
+    constructor(gameService, reviewService) {
         this.gameService = gameService;
+        this.reviewService = reviewService;
     }
     getAll() {
         return tslib_1.__awaiter(this, void 0, void 0, function* () {
@@ -285,34 +290,45 @@ let GameController = class GameController {
             return this.gameService.deleteById(id);
         });
     }
+    addReviewToGame(gameId, review) {
+        return tslib_1.__awaiter(this, void 0, void 0, function* () {
+            const reviewId = yield this.reviewService.createReview(review);
+            return this.gameService.addReviewToGame(gameId, reviewId);
+        });
+    }
+    removeReviewFromGame(gameId, reviewId) {
+        return tslib_1.__awaiter(this, void 0, void 0, function* () {
+            return this.gameService.removeReviewFromGame(gameId, reviewId);
+        });
+    }
 };
 tslib_1.__decorate([
     (0, common_1.Get)(),
     tslib_1.__metadata("design:type", Function),
     tslib_1.__metadata("design:paramtypes", []),
-    tslib_1.__metadata("design:returntype", typeof (_b = typeof Promise !== "undefined" && Promise) === "function" ? _b : Object)
+    tslib_1.__metadata("design:returntype", typeof (_c = typeof Promise !== "undefined" && Promise) === "function" ? _c : Object)
 ], GameController.prototype, "getAll", null);
 tslib_1.__decorate([
     (0, common_1.Get)(':id'),
     tslib_1.__param(0, (0, common_1.Param)('id')),
     tslib_1.__metadata("design:type", Function),
     tslib_1.__metadata("design:paramtypes", [String]),
-    tslib_1.__metadata("design:returntype", typeof (_c = typeof Promise !== "undefined" && Promise) === "function" ? _c : Object)
+    tslib_1.__metadata("design:returntype", typeof (_d = typeof Promise !== "undefined" && Promise) === "function" ? _d : Object)
 ], GameController.prototype, "getOne", null);
 tslib_1.__decorate([
     (0, common_1.Post)(),
     tslib_1.__param(0, (0, common_1.Body)()),
     tslib_1.__metadata("design:type", Function),
-    tslib_1.__metadata("design:paramtypes", [typeof (_d = typeof api_interfaces_1.gameRegistration !== "undefined" && api_interfaces_1.gameRegistration) === "function" ? _d : Object]),
-    tslib_1.__metadata("design:returntype", typeof (_e = typeof Promise !== "undefined" && Promise) === "function" ? _e : Object)
+    tslib_1.__metadata("design:paramtypes", [typeof (_e = typeof api_interfaces_1.gameRegistration !== "undefined" && api_interfaces_1.gameRegistration) === "function" ? _e : Object]),
+    tslib_1.__metadata("design:returntype", typeof (_f = typeof Promise !== "undefined" && Promise) === "function" ? _f : Object)
 ], GameController.prototype, "createGame", null);
 tslib_1.__decorate([
     (0, common_1.Put)(':id'),
     tslib_1.__param(0, (0, common_1.Param)('id')),
     tslib_1.__param(1, (0, common_1.Body)()),
     tslib_1.__metadata("design:type", Function),
-    tslib_1.__metadata("design:paramtypes", [String, typeof (_f = typeof api_interfaces_1.updateGameInfo !== "undefined" && api_interfaces_1.updateGameInfo) === "function" ? _f : Object]),
-    tslib_1.__metadata("design:returntype", typeof (_g = typeof Promise !== "undefined" && Promise) === "function" ? _g : Object)
+    tslib_1.__metadata("design:paramtypes", [String, typeof (_g = typeof api_interfaces_1.updateGameInfo !== "undefined" && api_interfaces_1.updateGameInfo) === "function" ? _g : Object]),
+    tslib_1.__metadata("design:returntype", typeof (_h = typeof Promise !== "undefined" && Promise) === "function" ? _h : Object)
 ], GameController.prototype, "updateSelf", null);
 tslib_1.__decorate([
     (0, common_1.Delete)(':id'),
@@ -321,9 +337,25 @@ tslib_1.__decorate([
     tslib_1.__metadata("design:paramtypes", [String]),
     tslib_1.__metadata("design:returntype", Promise)
 ], GameController.prototype, "deleteById", null);
+tslib_1.__decorate([
+    (0, common_1.Post)(':id/review'),
+    tslib_1.__param(0, (0, common_1.Param)('id')),
+    tslib_1.__param(1, (0, common_1.Body)()),
+    tslib_1.__metadata("design:type", Function),
+    tslib_1.__metadata("design:paramtypes", [String, typeof (_j = typeof api_interfaces_1.reviewRegistration !== "undefined" && api_interfaces_1.reviewRegistration) === "function" ? _j : Object]),
+    tslib_1.__metadata("design:returntype", Promise)
+], GameController.prototype, "addReviewToGame", null);
+tslib_1.__decorate([
+    (0, common_1.Delete)(':id/review'),
+    tslib_1.__param(0, (0, common_1.Param)('id')),
+    tslib_1.__param(1, (0, common_1.Body)()),
+    tslib_1.__metadata("design:type", Function),
+    tslib_1.__metadata("design:paramtypes", [String, String]),
+    tslib_1.__metadata("design:returntype", Promise)
+], GameController.prototype, "removeReviewFromGame", null);
 GameController = tslib_1.__decorate([
     (0, common_1.Controller)('game'),
-    tslib_1.__metadata("design:paramtypes", [typeof (_a = typeof game_service_1.GameService !== "undefined" && game_service_1.GameService) === "function" ? _a : Object])
+    tslib_1.__metadata("design:paramtypes", [typeof (_a = typeof game_service_1.GameService !== "undefined" && game_service_1.GameService) === "function" ? _a : Object, typeof (_b = typeof reviews_service_1.ReviewsService !== "undefined" && reviews_service_1.ReviewsService) === "function" ? _b : Object])
 ], GameController);
 exports.GameController = GameController;
 
@@ -360,6 +392,10 @@ tslib_1.__decorate([
     (0, mongoose_1.Prop)({ required: true }),
     tslib_1.__metadata("design:type", Number)
 ], Game.prototype, "score", void 0);
+tslib_1.__decorate([
+    (0, mongoose_1.Prop)({ default: [] }),
+    tslib_1.__metadata("design:type", Array)
+], Game.prototype, "reviews", void 0);
 Game = tslib_1.__decorate([
     (0, mongoose_1.Schema)()
 ], Game);
@@ -412,6 +448,16 @@ let GameService = class GameService {
             return this.gameModel.findByIdAndDelete({ _id: id });
         });
     }
+    addReviewToGame(gameId, reviewId) {
+        return tslib_1.__awaiter(this, void 0, void 0, function* () {
+            return this.gameModel.findByIdAndUpdate(gameId, { $push: { reviews: { reviewId } } });
+        });
+    }
+    removeReviewFromGame(gameId, reviewId) {
+        return tslib_1.__awaiter(this, void 0, void 0, function* () {
+            return this.gameModel.findByIdAndUpdate(gameId, { $pull: { reviews: { reviewId } } });
+        });
+    }
 };
 GameService = tslib_1.__decorate([
     (0, common_1.Injectable)(),
@@ -419,6 +465,104 @@ GameService = tslib_1.__decorate([
     tslib_1.__metadata("design:paramtypes", [typeof (_a = typeof mongoose_2.Model !== "undefined" && mongoose_2.Model) === "function" ? _a : Object])
 ], GameService);
 exports.GameService = GameService;
+
+
+/***/ }),
+
+/***/ "./apps/api/src/app/reviews/reviews.schema.ts":
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+
+var _a, _b;
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.reviewSchema = exports.Review = void 0;
+const tslib_1 = __webpack_require__("tslib");
+const mongoose_1 = __webpack_require__("@nestjs/mongoose");
+let Review = class Review {
+};
+tslib_1.__decorate([
+    (0, mongoose_1.Prop)({ required: true }),
+    tslib_1.__metadata("design:type", String)
+], Review.prototype, "user_ref", void 0);
+tslib_1.__decorate([
+    (0, mongoose_1.Prop)({ required: true }),
+    tslib_1.__metadata("design:type", String)
+], Review.prototype, "description", void 0);
+tslib_1.__decorate([
+    (0, mongoose_1.Prop)({ required: true, default: new Date() }),
+    tslib_1.__metadata("design:type", typeof (_a = typeof Date !== "undefined" && Date) === "function" ? _a : Object)
+], Review.prototype, "created_at", void 0);
+tslib_1.__decorate([
+    (0, mongoose_1.Prop)({ required: true, default: null }),
+    tslib_1.__metadata("design:type", typeof (_b = typeof Date !== "undefined" && Date) === "function" ? _b : Object)
+], Review.prototype, "modified_at", void 0);
+tslib_1.__decorate([
+    (0, mongoose_1.Prop)({ required: true, default: 0 }),
+    tslib_1.__metadata("design:type", Number)
+], Review.prototype, "game_score", void 0);
+tslib_1.__decorate([
+    (0, mongoose_1.Prop)({ required: true, default: 0 }),
+    tslib_1.__metadata("design:type", Number)
+], Review.prototype, "review_score", void 0);
+Review = tslib_1.__decorate([
+    (0, mongoose_1.Schema)()
+], Review);
+exports.Review = Review;
+exports.reviewSchema = mongoose_1.SchemaFactory.createForClass(Review);
+
+
+/***/ }),
+
+/***/ "./apps/api/src/app/reviews/reviews.service.ts":
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+
+var _a;
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.ReviewsService = void 0;
+const tslib_1 = __webpack_require__("tslib");
+const common_1 = __webpack_require__("@nestjs/common");
+const mongoose_1 = __webpack_require__("@nestjs/mongoose");
+const mongoose_2 = __webpack_require__("mongoose");
+const reviews_schema_1 = __webpack_require__("./apps/api/src/app/reviews/reviews.schema.ts");
+let ReviewsService = class ReviewsService {
+    constructor(reviewModel) {
+        this.reviewModel = reviewModel;
+    }
+    getAll() {
+        return tslib_1.__awaiter(this, void 0, void 0, function* () {
+            return this.reviewModel.find().exec();
+        });
+    }
+    getOne(id) {
+        return tslib_1.__awaiter(this, void 0, void 0, function* () {
+            return this.reviewModel.findOne({ _id: id }).exec();
+        });
+    }
+    createReview(reviewInfo) {
+        return tslib_1.__awaiter(this, void 0, void 0, function* () {
+            const review = new this.reviewModel(reviewInfo);
+            yield review.save();
+            return review._id;
+        });
+    }
+    updateOne(id, body) {
+        return tslib_1.__awaiter(this, void 0, void 0, function* () {
+            return this.reviewModel.findByIdAndUpdate({ _id: id }, body);
+        });
+    }
+    deleteById(id) {
+        return tslib_1.__awaiter(this, void 0, void 0, function* () {
+            return this.reviewModel.findByIdAndDelete({ _id: id });
+        });
+    }
+};
+ReviewsService = tslib_1.__decorate([
+    (0, common_1.Injectable)(),
+    tslib_1.__param(0, (0, mongoose_1.InjectModel)(reviews_schema_1.Review.name)),
+    tslib_1.__metadata("design:paramtypes", [typeof (_a = typeof mongoose_2.Model !== "undefined" && mongoose_2.Model) === "function" ? _a : Object])
+], ReviewsService);
+exports.ReviewsService = ReviewsService;
 
 
 /***/ }),
@@ -672,6 +816,7 @@ const tslib_1 = __webpack_require__("tslib");
 tslib_1.__exportStar(__webpack_require__("./libs/api-interfaces/src/lib/api-interfaces.ts"), exports);
 tslib_1.__exportStar(__webpack_require__("./libs/api-interfaces/src/lib/user-interfaces.ts"), exports);
 tslib_1.__exportStar(__webpack_require__("./libs/api-interfaces/src/lib/game-interfaces.ts"), exports);
+tslib_1.__exportStar(__webpack_require__("./libs/api-interfaces/src/lib/review-interfaces.ts"), exports);
 
 
 /***/ }),
@@ -686,6 +831,15 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 /***/ }),
 
 /***/ "./libs/api-interfaces/src/lib/game-interfaces.ts":
+/***/ ((__unused_webpack_module, exports) => {
+
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+
+
+/***/ }),
+
+/***/ "./libs/api-interfaces/src/lib/review-interfaces.ts":
 /***/ ((__unused_webpack_module, exports) => {
 
 
