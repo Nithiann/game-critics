@@ -31,4 +31,8 @@ export class GameService {
     async deleteById(id: string): Promise<void> {
       return this.gameModel.findByIdAndDelete({_id: id});
     }
+
+    async addReviewToGame(gameId: string, reviewId: string) {
+      return this.gameModel.findByIdAndUpdate(gameId, {$push: {reviewId}})
+    }
   }

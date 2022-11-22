@@ -1,12 +1,14 @@
-import { gameRegistration, updateGameInfo } from '@game-critics/api-interfaces';
+import { gameRegistration, reviewRegistration, updateGameInfo } from '@game-critics/api-interfaces';
 import { Body, Controller, Delete, Get, HttpException, HttpStatus, Logger, Param, Post, Put } from '@nestjs/common';
+import { ReviewsService } from '../reviews/reviews.service';
 import { Game } from './game.schema';
 import { GameService } from './game.service';
 
 @Controller('game')
 export class GameController {
   constructor(
-    private readonly gameService: GameService
+    private readonly gameService: GameService,
+    private readonly reviewService: ReviewsService
   ) {}
 
   @Get()
@@ -37,5 +39,12 @@ export class GameController {
   @Delete(':id')
   async deleteById(@Param('id') id: string) {
     return this.gameService.deleteById(id);
+  }
+
+  @Post(':id/review')
+  async addReviewToGame(@Param('id') gameId: string, @Body() review: reviewRegistration){
+    const reviewId = await this.reviewService.createReview(review);
+
+    return this.gameService.addReviewToGame(gameId, reviewId);
   }
 }

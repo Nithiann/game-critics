@@ -1,5 +1,5 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
-import { randomUUID } from "crypto";
+import { Review } from '../reviews/reviews.schema';
 
 export type GameDocument = Game & Document;
 
@@ -22,8 +22,8 @@ export class Game {
   @Prop({required: true})
   score: number
 
-  // @Prop({default: []})
-  // reviews: [reviews]
+  @Prop({default: []})
+  reviews: [Review]
 }
 
 export const GameSchema = SchemaFactory.createForClass(Game);

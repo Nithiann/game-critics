@@ -8,6 +8,7 @@ import { GameController } from './game/game.controller';
 import { Game, GameSchema } from './game/game.schema';
 import { AuthService } from './auth/auth.service';
 import { Identity, IdentitySchema } from './auth/identity.schema';
+import { ReviewsService } from './reviews/reviews.service';
 
 @Module({
   imports: [
@@ -18,6 +19,6 @@ import { Identity, IdentitySchema } from './auth/identity.schema';
     ]),
   ],
   controllers: [UserController, GameController],
-  providers: [UserService, GameService, AuthService],
+  providers: [UserService, GameService, AuthService, ReviewsService],
 })
 export class ApiModule {}
