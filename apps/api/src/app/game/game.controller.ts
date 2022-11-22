@@ -47,4 +47,9 @@ export class GameController {
 
     return this.gameService.addReviewToGame(gameId, reviewId);
   }
+
+  @Delete(':id/review')
+  async removeReviewFromGame(@Param('id') gameId: string, @Body() reviewId: string) {
+    return this.gameService.removeReviewFromGame(gameId, reviewId);
+  }
 }

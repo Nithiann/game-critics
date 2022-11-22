@@ -33,6 +33,10 @@ export class GameService {
     }
 
     async addReviewToGame(gameId: string, reviewId: string) {
-      return this.gameModel.findByIdAndUpdate(gameId, {$push: {reviewId}})
+      return this.gameModel.findByIdAndUpdate(gameId, {$push: {reviews: {reviewId}}})
+    }
+
+    async removeReviewFromGame(gameId: string, reviewId: string) {
+      return this.gameModel.findByIdAndUpdate(gameId, {$pull: {reviews: {reviewId}}})
     }
   }
