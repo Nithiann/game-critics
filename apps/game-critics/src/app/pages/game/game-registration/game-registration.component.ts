@@ -16,7 +16,7 @@ export class GameRegistrationComponent implements OnInit {
   id!: string;
   game!: gameRegistration;
   registerForm = new FormGroup({
-    id: new FormControl(),
+    _id: new FormControl(),
     title: new FormControl('', [Validators.required]),
     description: new FormControl('', [Validators.required]),
     image: new FormControl('', [Validators.required]),

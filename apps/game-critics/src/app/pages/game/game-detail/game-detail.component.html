@@ -1,4 +1,4 @@
-<div class="container">
+<div class="container" *ngIf="game !== null">
   <div class="container image">
     <p-image src={{game.image}} alt="Image" width="250"></p-image>
   </div>
@@ -9,6 +9,10 @@
   <p>{{game.score}}</p>
 </div>
 
+
+
 <h3>Game reviews</h3>
 
-<p>No reviews for this game yet!</p>
+<div *ngIf="game">
+  <game-critics-create-review [game]="game._id"></game-critics-create-review>
+</div>

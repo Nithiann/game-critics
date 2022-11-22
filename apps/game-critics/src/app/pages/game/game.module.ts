@@ -11,11 +11,11 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { GameDetailComponent } from './game-detail/game-detail.component';
 import { ImageModule } from 'primeng/image';
 import { GameListComponent } from './game-list/game-list.component';
-import {DataViewModule} from 'primeng/dataview';
-import {CardModule} from 'primeng/card';
-import {RatingModule} from 'primeng/rating';
-import {MultiSelectModule} from 'primeng/multiselect';
-
+import { DataViewModule } from 'primeng/dataview';
+import { CardModule } from 'primeng/card';
+import { RatingModule } from 'primeng/rating';
+import { MultiSelectModule } from 'primeng/multiselect';
+import { CreateReviewComponent } from './create-review/create-review.component';
 
 @NgModule({
   declarations: [
@@ -23,6 +23,7 @@ import {MultiSelectModule} from 'primeng/multiselect';
     GameRegistrationComponent,
     GameDetailComponent,
     GameListComponent,
+    CreateReviewComponent,
   ],
   imports: [
     CommonModule,
@@ -35,7 +36,7 @@ import {MultiSelectModule} from 'primeng/multiselect';
     DataViewModule,
     CardModule,
     RatingModule,
-    MultiSelectModule
+    MultiSelectModule,
   ],
   providers: [GameService],
 })
