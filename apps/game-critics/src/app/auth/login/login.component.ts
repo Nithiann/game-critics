@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { credentialsForm } from '@game-critics/api-interfaces';
+import { Router } from '@angular/router';
+import { credentialsForm, verification } from '@game-critics/api-interfaces';
+import { AuthService } from '../auth.service';
 
 @Component({
   selector: 'game-critics-login',
@@ -13,10 +15,13 @@ export class LoginComponent {
     password: new FormControl('', [Validators.required, Validators.minLength(7)])
   })
   // eslint-disable-next-line @typescript-eslint/no-empty-function
-  constructor() {}
+  constructor(protected _service: AuthService, protected router: Router) {}
 
 
   onSubmit(credentials: credentialsForm) {
-    console.log(credentials);
+    this._service.login(credentials)
+    .subscribe((res) => {
+      this.router.navigate(['/games'])
+    })
   }
 }

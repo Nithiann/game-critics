@@ -10,6 +10,7 @@ import { ButtonModule } from 'primeng/button';
 import { VerifyRoutingModule } from './verify-routing.module';
 import { PasswordModule } from 'primeng/password';
 import { LoginComponent } from './login/login.component';
+import { JwtHelperService, JWT_OPTIONS } from '@auth0/angular-jwt';
 
 
 @NgModule({
@@ -24,6 +25,10 @@ import { LoginComponent } from './login/login.component';
     CalendarModule,
     PasswordModule,
   ],
-  providers: [AuthService],
+  providers: [
+    AuthService,
+    JwtHelperService,
+    { provide: JWT_OPTIONS, useValue: JWT_OPTIONS },
+  ],
 })
 export class AuthModule {}

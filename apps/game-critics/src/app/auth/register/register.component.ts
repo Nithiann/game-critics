@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 import { userRegistration } from '@game-critics/api-interfaces';
 import { AuthService } from '../auth.service';
 
@@ -18,7 +19,7 @@ export class RegisterComponent implements OnInit {
     age: new FormControl(new Date(), Validators.required)
   })
 
-  constructor(private service: AuthService) {}
+  constructor(private service: AuthService, protected router: Router) {}
 
   // eslint-disable-next-line @angular-eslint/no-empty-lifecycle-method, @typescript-eslint/no-empty-function
   ngOnInit(): void {}
@@ -26,7 +27,7 @@ export class RegisterComponent implements OnInit {
   onSubmit(user: userRegistration) {
     this.service.register(user)
     .subscribe((res) => {
-      console.log(res);
+      this.router.navigate(['games'])
     });
   }
 }
