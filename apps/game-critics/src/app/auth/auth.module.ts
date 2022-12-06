@@ -4,14 +4,16 @@ import { RegisterComponent } from './register/register.component';
 import { HttpClientModule } from '@angular/common/http';
 import { AuthService } from './auth.service';
 import { ReactiveFormsModule } from '@angular/forms';
-import {InputTextModule} from 'primeng/inputtext';
-import {CalendarModule} from 'primeng/calendar';
-import {ButtonModule} from 'primeng/button';
+import { InputTextModule } from 'primeng/inputtext';
+import { CalendarModule } from 'primeng/calendar';
+import { ButtonModule } from 'primeng/button';
 import { VerifyRoutingModule } from './verify-routing.module';
-import {PasswordModule} from 'primeng/password';
+import { PasswordModule } from 'primeng/password';
+import { LoginComponent } from './login/login.component';
+
 
 @NgModule({
-  declarations: [RegisterComponent],
+  declarations: [RegisterComponent, LoginComponent],
   imports: [
     CommonModule,
     VerifyRoutingModule,
@@ -20,8 +22,8 @@ import {PasswordModule} from 'primeng/password';
     ReactiveFormsModule,
     InputTextModule,
     CalendarModule,
-    PasswordModule
+    PasswordModule,
   ],
-  providers: [AuthService]
+  providers: [AuthService],
 })
 export class AuthModule {}

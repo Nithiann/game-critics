@@ -817,11 +817,21 @@ tslib_1.__exportStar(__webpack_require__("./libs/api-interfaces/src/lib/api-inte
 tslib_1.__exportStar(__webpack_require__("./libs/api-interfaces/src/lib/user-interfaces.ts"), exports);
 tslib_1.__exportStar(__webpack_require__("./libs/api-interfaces/src/lib/game-interfaces.ts"), exports);
 tslib_1.__exportStar(__webpack_require__("./libs/api-interfaces/src/lib/review-interfaces.ts"), exports);
+tslib_1.__exportStar(__webpack_require__("./libs/api-interfaces/src/lib/auth-interfaces.ts"), exports);
 
 
 /***/ }),
 
 /***/ "./libs/api-interfaces/src/lib/api-interfaces.ts":
+/***/ ((__unused_webpack_module, exports) => {
+
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+
+
+/***/ }),
+
+/***/ "./libs/api-interfaces/src/lib/auth-interfaces.ts":
 /***/ ((__unused_webpack_module, exports) => {
 
 

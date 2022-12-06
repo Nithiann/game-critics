@@ -14,6 +14,7 @@ import { RouterModule } from '@angular/router';
 import { AppRoutingModule } from './app-routing.module';
 import { UsersModule } from './pages/users/users.module';
 import { AuthModule } from './auth/auth.module';
+import {ButtonModule} from 'primeng/button';
 import { GamesModule } from './pages/game/game.module';
 
 @NgModule({
@@ -35,7 +36,8 @@ import { GamesModule } from './pages/game/game.module';
     UsersModule,
     AuthModule,
     GamesModule,
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    ButtonModule
   ],
   providers: [],
   bootstrap: [AppComponent],

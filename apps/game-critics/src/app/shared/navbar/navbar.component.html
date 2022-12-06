@@ -1,3 +1,6 @@
 <p-menubar [model]="menuItems">
-
+  <ng-template pTemplate="end">
+    <button pButton routerLink="/verify/login" class="loginButton">Login</button>
+    <button pButton routerLink="/verify/register" class="registerButton">Register</button>
+  </ng-template>
 </p-menubar>

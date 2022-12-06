@@ -1,0 +1,12 @@
+<form [formGroup]="loginForm" (onSubmit)="onSubmit(loginForm.getRawValue())">
+  <span class="p-float-label">
+    <input pInputText type="email" id="emailInput" formControlName="email">
+    <label for="emailInput">Email</label>
+  </span>
+  <span>
+    <input pInputText type="password" id="passwordInput" formControlName="password">
+    <label for="passwordInput">Password</label>
+  </span>
+
+  <input type="submit" pButton>
+</form>
