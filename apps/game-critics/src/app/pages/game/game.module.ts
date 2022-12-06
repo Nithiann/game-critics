@@ -15,6 +15,7 @@ import { DataViewModule } from 'primeng/dataview';
 import { CardModule } from 'primeng/card';
 import { RatingModule } from 'primeng/rating';
 import { MultiSelectModule } from 'primeng/multiselect';
+import {InputTextareaModule} from 'primeng/inputtextarea';
 import { CreateReviewComponent } from './create-review/create-review.component';
 
 @NgModule({
@@ -37,6 +38,7 @@ import { CreateReviewComponent } from './create-review/create-review.component';
     CardModule,
     RatingModule,
     MultiSelectModule,
+    InputTextareaModule,
   ],
   providers: [GameService],
 })

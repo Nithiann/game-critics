@@ -1,1 +1,11 @@
-<p>create-review works!</p>
+<form [formGroup]="reviewForm" (ngSubmit)="onSubmit(reviewForm.getRawValue())">
+
+  <span class="p-float-label">
+    <textarea pInputTextarea id="reviewDescription" formControlName="description"></textarea>
+    <label for="reviewDescription">Description</label>
+  </span>
+
+  <p-rating formControlName="game_score" required></p-rating>
+
+  <input type="submit" pButton>
+</form>

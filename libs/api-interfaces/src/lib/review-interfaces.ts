@@ -1,5 +1,5 @@
 export interface reviewRegistration {
-  user_ref: string;
-  description: string;
-  game_score: number;
+  user_ref: string | null;
+  description: string | null;
+  game_score: number | null;
 }
