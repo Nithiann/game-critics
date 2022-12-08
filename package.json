@@ -29,6 +29,7 @@
     "@nestjs/serve-static": "^3.0.0",
     "@nrwl/angular": "15.0.13",
     "bcrypt": "^5.1.0",
+    "jsonwebtoken": "^8.5.1",
     "mongoose": "^6.7.2",
     "primeflex": "^3.3.0",
     "primeicons": "^6.0.1",

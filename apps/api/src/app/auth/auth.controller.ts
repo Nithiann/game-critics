@@ -1,6 +1,6 @@
 
 import { Body, Controller, HttpException, HttpStatus, Logger, Post } from '@nestjs/common';
-import { userInfo, userRegistration } from '@game-critics/api-interfaces';
+import { credentialsForm, userInfo, userRegistration } from '@game-critics/api-interfaces';
 import { AuthService } from './auth.service';
 
 @Controller()
@@ -20,4 +20,15 @@ export class AuthController {
       throw new HttpException('Data invalid', HttpStatus.BAD_REQUEST)
     }
   }
+
+  @Post('login')
+    async login(@Body() credentials: credentialsForm): Promise<Token> {
+        try {
+            return {
+                token: await this.authService.generateToken(credentials.email, credentials.password)
+            };
+        } catch (e) {
+            throw new HttpException('Invalid credentials', HttpStatus.UNAUTHORIZED);
+        }
+    }
 }
