@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ServeStaticModule } from '@nestjs/serve-static'; // <- INSERT LINE
 import { join } from 'path'; // <- INSERT LINE
@@ -6,6 +6,7 @@ import { environment } from '../environments/environment';
 import { AuthModule } from './auth/auth.module';
 import { ApiModule } from './api.module';
 import { RouterModule } from '@nestjs/core';
+import { TokenMiddleware } from './auth/token.middleware';
 
 @Module({
   imports: [
@@ -30,4 +31,8 @@ import { RouterModule } from '@nestjs/core';
   controllers: [],
   providers: [],
 })
-export class AppModule {}
+export class AppModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(TokenMiddleware);
+  }
+}

@@ -1,4 +1,4 @@
-<form [formGroup]="loginForm" (onSubmit)="onSubmit(loginForm.getRawValue())">
+<form [formGroup]="loginForm" (ngSubmit)="onSubmit(loginForm.getRawValue())">
   <span class="p-float-label emailField">
     <input pInputText type="email" id="emailInput" formControlName="email">
     <label for="emailInput">Email</label>

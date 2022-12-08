@@ -57,7 +57,11 @@ const environment_1 = __webpack_require__("./apps/api/src/environments/environme
 const auth_module_1 = __webpack_require__("./apps/api/src/app/auth/auth.module.ts");
 const api_module_1 = __webpack_require__("./apps/api/src/app/api.module.ts");
 const core_1 = __webpack_require__("@nestjs/core");
+const token_middleware_1 = __webpack_require__("./apps/api/src/app/auth/token.middleware.ts");
 let AppModule = class AppModule {
+    configure(consumer) {
+        consumer.apply(token_middleware_1.TokenMiddleware);
+    }
 };
 AppModule = tslib_1.__decorate([
     (0, common_1.Module)({
@@ -93,7 +97,7 @@ exports.AppModule = AppModule;
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
-var _a, _b, _c;
+var _a, _b, _c, _d, _e;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.AuthController = void 0;
 const tslib_1 = __webpack_require__("tslib");
@@ -118,6 +122,18 @@ let AuthController = class AuthController {
             }
         });
     }
+    login(credentials) {
+        return tslib_1.__awaiter(this, void 0, void 0, function* () {
+            try {
+                return {
+                    token: yield this.authService.generateToken(credentials.email, credentials.password)
+                };
+            }
+            catch (e) {
+                throw new common_1.HttpException('Invalid credentials', common_1.HttpStatus.UNAUTHORIZED);
+            }
+        });
+    }
 };
 tslib_1.__decorate([
     (0, common_1.Post)('register'),
@@ -126,6 +142,13 @@ tslib_1.__decorate([
     tslib_1.__metadata("design:paramtypes", [typeof (_b = typeof api_interfaces_1.userRegistration !== "undefined" && api_interfaces_1.userRegistration) === "function" ? _b : Object]),
     tslib_1.__metadata("design:returntype", typeof (_c = typeof Promise !== "undefined" && Promise) === "function" ? _c : Object)
 ], AuthController.prototype, "register", null);
+tslib_1.__decorate([
+    (0, common_1.Post)('login'),
+    tslib_1.__param(0, (0, common_1.Body)()),
+    tslib_1.__metadata("design:type", Function),
+    tslib_1.__metadata("design:paramtypes", [typeof (_d = typeof api_interfaces_1.credentialsForm !== "undefined" && api_interfaces_1.credentialsForm) === "function" ? _d : Object]),
+    tslib_1.__metadata("design:returntype", typeof (_e = typeof Promise !== "undefined" && Promise) === "function" ? _e : Object)
+], AuthController.prototype, "login", null);
 AuthController = tslib_1.__decorate([
     (0, common_1.Controller)(),
     tslib_1.__metadata("design:paramtypes", [typeof (_a = typeof auth_service_1.AuthService !== "undefined" && auth_service_1.AuthService) === "function" ? _a : Object])
@@ -178,6 +201,7 @@ const tslib_1 = __webpack_require__("tslib");
 const common_1 = __webpack_require__("@nestjs/common");
 const mongoose_1 = __webpack_require__("@nestjs/mongoose");
 const bcrypt_1 = __webpack_require__("bcrypt");
+const jsonwebtoken_1 = __webpack_require__("jsonwebtoken");
 const mongoose_2 = __webpack_require__("mongoose");
 const user_schema_1 = __webpack_require__("./apps/api/src/app/user/user.schema.ts");
 const identity_schema_1 = __webpack_require__("./apps/api/src/app/auth/identity.schema.ts");
@@ -185,6 +209,18 @@ let AuthService = class AuthService {
     constructor(identityModel, userModel) {
         this.identityModel = identityModel;
         this.userModel = userModel;
+    }
+    verifyToken(token) {
+        return tslib_1.__awaiter(this, void 0, void 0, function* () {
+            return new Promise((resolve, reject) => {
+                (0, jsonwebtoken_1.verify)(token, process.env.JWT_SECRET, (err, payload) => {
+                    if (err)
+                        reject(err);
+                    else
+                        resolve(payload);
+                });
+            });
+        });
     }
     createUser(email, displayName, firstName, lastName, age) {
         return tslib_1.__awaiter(this, void 0, void 0, function* () {
@@ -198,6 +234,26 @@ let AuthService = class AuthService {
             const generatedHash = yield (0, bcrypt_1.hash)(password, parseInt(process.env.SALT_ROUNDS, 10));
             const identity = new this.identityModel({ email, hash: generatedHash });
             yield identity.save();
+        });
+    }
+    generateToken(email, password) {
+        return tslib_1.__awaiter(this, void 0, void 0, function* () {
+            const identity = yield this.identityModel.findOne({ email });
+            if (!identity || !(yield (0, bcrypt_1.compare)(password, identity.hash)))
+                throw new Error("user not authorized");
+            const user = yield this.userModel.findOne({ email: email });
+            return new Promise((res, rej) => {
+                (0, jsonwebtoken_1.sign)({
+                    role: user.role,
+                    id: user._id,
+                    name: user.firstName + " " + user.lastName
+                }, process.env.JWT_SECRET, (err, token) => {
+                    if (err)
+                        rej(err);
+                    else
+                        res(token);
+                });
+            });
         });
     }
 };
@@ -238,6 +294,46 @@ Identity = tslib_1.__decorate([
 ], Identity);
 exports.Identity = Identity;
 exports.IdentitySchema = mongoose_1.SchemaFactory.createForClass(Identity);
+
+
+/***/ }),
+
+/***/ "./apps/api/src/app/auth/token.middleware.ts":
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+
+var _a;
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.TokenMiddleware = void 0;
+const tslib_1 = __webpack_require__("tslib");
+const common_1 = __webpack_require__("@nestjs/common");
+const auth_service_1 = __webpack_require__("./apps/api/src/app/auth/auth.service.ts");
+let TokenMiddleware = class TokenMiddleware {
+    constructor(authService) {
+        this.authService = authService;
+    }
+    use(req, res, next) {
+        return tslib_1.__awaiter(this, void 0, void 0, function* () {
+            const authHeader = req.header('authorization');
+            if (!authHeader) {
+                throw new common_1.HttpException('No authorization header', common_1.HttpStatus.UNAUTHORIZED);
+            }
+            try {
+                const token = yield this.authService.verifyToken(authHeader);
+                res.locals.token = token;
+            }
+            catch (e) {
+                throw new common_1.HttpException('Token invalid', common_1.HttpStatus.UNAUTHORIZED);
+            }
+            next();
+        });
+    }
+};
+TokenMiddleware = tslib_1.__decorate([
+    (0, common_1.Injectable)(),
+    tslib_1.__metadata("design:paramtypes", [typeof (_a = typeof auth_service_1.AuthService !== "undefined" && auth_service_1.AuthService) === "function" ? _a : Object])
+], TokenMiddleware);
+exports.TokenMiddleware = TokenMiddleware;
 
 
 /***/ }),
@@ -571,7 +667,7 @@ exports.ReviewsService = ReviewsService;
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
-var _a, _b, _c, _d, _e, _f, _g, _h;
+var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.UserController = void 0;
 const tslib_1 = __webpack_require__("tslib");
@@ -618,6 +714,18 @@ let UserController = class UserController {
             }
         });
     }
+    login(credentials) {
+        return tslib_1.__awaiter(this, void 0, void 0, function* () {
+            try {
+                return {
+                    token: yield this.authService.generateToken(credentials.email, credentials.password)
+                };
+            }
+            catch (e) {
+                throw new common_1.HttpException('Invalid credentials', common_1.HttpStatus.UNAUTHORIZED);
+            }
+        });
+    }
 };
 tslib_1.__decorate([
     (0, common_1.Get)(),
@@ -654,6 +762,13 @@ tslib_1.__decorate([
     tslib_1.__metadata("design:paramtypes", [typeof (_g = typeof api_interfaces_1.userRegistration !== "undefined" && api_interfaces_1.userRegistration) === "function" ? _g : Object]),
     tslib_1.__metadata("design:returntype", typeof (_h = typeof Promise !== "undefined" && Promise) === "function" ? _h : Object)
 ], UserController.prototype, "register", null);
+tslib_1.__decorate([
+    (0, common_1.Post)('login'),
+    tslib_1.__param(0, (0, common_1.Body)()),
+    tslib_1.__metadata("design:type", Function),
+    tslib_1.__metadata("design:paramtypes", [typeof (_j = typeof api_interfaces_1.credentialsForm !== "undefined" && api_interfaces_1.credentialsForm) === "function" ? _j : Object]),
+    tslib_1.__metadata("design:returntype", typeof (_k = typeof Promise !== "undefined" && Promise) === "function" ? _k : Object)
+], UserController.prototype, "login", null);
 UserController = tslib_1.__decorate([
     (0, common_1.Controller)('user'),
     tslib_1.__metadata("design:paramtypes", [typeof (_a = typeof user_service_1.UserService !== "undefined" && user_service_1.UserService) === "function" ? _a : Object, typeof (_b = typeof auth_service_1.AuthService !== "undefined" && auth_service_1.AuthService) === "function" ? _b : Object])
@@ -818,6 +933,7 @@ tslib_1.__exportStar(__webpack_require__("./libs/api-interfaces/src/lib/user-int
 tslib_1.__exportStar(__webpack_require__("./libs/api-interfaces/src/lib/game-interfaces.ts"), exports);
 tslib_1.__exportStar(__webpack_require__("./libs/api-interfaces/src/lib/review-interfaces.ts"), exports);
 tslib_1.__exportStar(__webpack_require__("./libs/api-interfaces/src/lib/auth-interfaces.ts"), exports);
+tslib_1.__exportStar(__webpack_require__("./libs/api-interfaces/src/lib/id.type.ts"), exports);
 
 
 /***/ }),
@@ -841,6 +957,15 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 /***/ }),
 
 /***/ "./libs/api-interfaces/src/lib/game-interfaces.ts":
+/***/ ((__unused_webpack_module, exports) => {
+
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+
+
+/***/ }),
+
+/***/ "./libs/api-interfaces/src/lib/id.type.ts":
 /***/ ((__unused_webpack_module, exports) => {
 
 
@@ -905,6 +1030,13 @@ module.exports = require("@nestjs/serve-static");
 /***/ ((module) => {
 
 module.exports = require("bcrypt");
+
+/***/ }),
+
+/***/ "jsonwebtoken":
+/***/ ((module) => {
+
+module.exports = require("jsonwebtoken");
 
 /***/ }),
 

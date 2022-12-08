@@ -1,10 +1,10 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { credentialsForm, userInfo, userRegistration } from '@game-critics/api-interfaces';
+import { credentialsForm, userInfo, userRegistration, verification } from '@game-critics/api-interfaces';
 import { Observable } from 'rxjs/internal/Observable';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { environment } from '../../environments/environment';
-import { BehaviorSubject, of, switchMap } from 'rxjs';
+import { BehaviorSubject, catchError, map, of, switchMap } from 'rxjs';
 import { Router } from '@angular/router';
 import { AlertService } from '../shared/alert.service';
 
@@ -44,8 +44,33 @@ export class AuthService {
       .subscribe(() => console.log('Startup auth done'));
   }
 
-  login(user: credentialsForm): Observable<credentialsForm> {
-    return this._http.post<credentialsForm>(this.baseURL + '/login', user);
+  login(user: credentialsForm): Observable<verification | undefined> {
+
+    return this._http
+      .post<verification>(
+        this.baseURL + '/login',
+        user,
+        {
+          headers: this.headers,
+        }
+      )
+      .pipe(
+        map((resp: any) => resp),
+        map((data: userInfo) => {
+          console.log(data);
+          this.saveUserToLocalStorage(data);
+          this.currentUser$.next(data);
+          this.alert.success('You have been logged in');
+          return data;
+        }),
+        catchError((error) => {
+          console.log('error:', error);
+          console.log('error.message:', error.message);
+          console.log('error.error.message:', error.error.message);
+          this.alert.error(error.error.message || error.message);
+          return of(undefined);
+        })
+      );
   }
 
   register(user: userRegistration): Observable<userRegistration> {
@@ -86,7 +111,7 @@ export class AuthService {
     }
   }
 
-  private saveUserToLocalStorage(user: UserInfo): void {
+  private saveUserToLocalStorage(user: userInfo): void {
     localStorage.setItem(this.CURRENT_USER, JSON.stringify(user));
   }
 

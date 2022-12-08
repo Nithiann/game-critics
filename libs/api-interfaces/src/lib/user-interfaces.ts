@@ -1,3 +1,6 @@
+import { verification } from "./auth-interfaces";
+import { reviewRegistration } from "./review-interfaces";
+
 enum userRole {
   user,
   reviewer,
@@ -21,6 +24,11 @@ export interface updateUserInfo {
   age: Date;
 }
 
-export interface userInfo {
-  id: string;
+export interface userInfo extends verification {
+  email: string;
+  displayName: string;
+  firstName: string;
+  lastName: string;
+  age: Date;
+  reviews: reviewRegistration[]
 }
