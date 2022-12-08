@@ -6,6 +6,7 @@ import { Model } from 'mongoose';
 import { resolve } from 'path';
 import { User, UserDocument } from '../user/user.schema';
 import { Identity, IdentityDocument } from './identity.schema';
+import { Token } from './token.decorator';
 
 @Injectable()
 export class AuthService {
