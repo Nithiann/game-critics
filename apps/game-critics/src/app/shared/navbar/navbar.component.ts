@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import {MenubarModule} from 'primeng/menubar';
 import {MenuItem, PrimeIcons} from 'primeng/api';
+import { userInfo } from '@game-critics/api-interfaces';
+import { Observable } from 'rxjs';
+import { AuthService } from '../../auth/auth.service';
 
 
 @Component({
@@ -10,11 +13,13 @@ import {MenuItem, PrimeIcons} from 'primeng/api';
 })
 export class NavbarComponent implements OnInit {
   menuItems: MenuItem[] = [];
+  loggedInUser$!: Observable<userInfo | undefined>;
 
   // eslint-disable-next-line @typescript-eslint/no-empty-function
-  constructor() {}
+  constructor(private authService: AuthService) {}
 
   ngOnInit(): void {
+    this.loggedInUser$ = this.authService.currentUser$;
     this.menuItems = [
       {
         label: 'Home',
@@ -63,5 +68,9 @@ export class NavbarComponent implements OnInit {
         routerLink: '/about'
       }
     ]
+  }
+
+  logout(): void {
+    this.authService.logout();
   }
 }

@@ -50,7 +50,7 @@ export class AuthService {
       sign({
           role: user.role,
           id: user._id,
-          name: user.firstName + " " + user.lastName
+          email: user.email
         },
         process.env.JWT_SECRET,
         (err, token) => {

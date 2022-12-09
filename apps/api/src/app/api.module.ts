@@ -22,5 +22,6 @@ import { Review, reviewSchema } from './reviews/reviews.schema';
   ],
   controllers: [UserController, GameController],
   providers: [UserService, GameService, AuthService, ReviewsService],
+  exports: [AuthService],
 })
 export class ApiModule {}

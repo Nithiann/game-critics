@@ -35,6 +35,7 @@ ApiModule = tslib_1.__decorate([
         ],
         controllers: [user_controller_1.UserController, game_controller_1.GameController],
         providers: [user_service_1.UserService, game_service_1.GameService, auth_service_1.AuthService, reviews_service_1.ReviewsService],
+        exports: [auth_service_1.AuthService],
     })
 ], ApiModule);
 exports.ApiModule = ApiModule;
@@ -246,7 +247,7 @@ let AuthService = class AuthService {
                 (0, jsonwebtoken_1.sign)({
                     role: user.role,
                     id: user._id,
-                    name: user.firstName + " " + user.lastName
+                    email: user.email
                 }, process.env.JWT_SECRET, (err, token) => {
                     if (err)
                         rej(err);

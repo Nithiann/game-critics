@@ -1,6 +1,9 @@
 <p-menubar [model]="menuItems">
-  <ng-template pTemplate="end">
+  <ng-template pTemplate="end" *ngIf="(loggedInUser$ | async) === undefined">
     <button pButton routerLink="/verify/login" class="loginButton">Login</button>
     <button pButton routerLink="/verify/register" class="registerButton">Register</button>
+  </ng-template>
+  <ng-template pTemplate="end" *ngIf="(loggedInUser$ | async)">
+    <button pButton (click)="logout()" class="loginButton">Logout</button>
   </ng-template>
 </p-menubar>

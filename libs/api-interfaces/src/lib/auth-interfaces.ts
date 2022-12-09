@@ -7,7 +7,7 @@ export interface credentialsForm {
 
 export interface verification{
   role: number,
-  name: string,
+  email: string,
   _id: string,
 }
 

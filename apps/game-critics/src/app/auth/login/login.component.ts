@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { credentialsForm, userInfo, verification } from '@game-critics/api-interfaces';
+import { credentialsForm, UserIdentity, userInfo, verification } from '@game-critics/api-interfaces';
 import { Subscription } from 'rxjs';
 import { AuthService } from '../auth.service';
 
@@ -31,8 +31,9 @@ export class LoginComponent {
 
   onSubmit(credentials: credentialsForm) {
     this._service.login(credentials)
-    .subscribe((res) => {
-      this.router.navigate(['/games'])
+    .subscribe((user: verification | undefined) => {
+      if (user)
+        this.router.navigate(['/games'])
     })
   }
 }

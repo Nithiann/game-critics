@@ -1,9 +1,10 @@
+import { Id } from '@game-critics/api-interfaces';
 import { createParamDecorator, ExecutionContext } from '@nestjs/common';
 
 export interface Token {
   name: string,
   role: any,
-  id: string,
+  id: Id,
 }
 
 export const InjectToken = createParamDecorator(
