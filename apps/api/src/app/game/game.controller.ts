@@ -1,5 +1,6 @@
-import { gameRegistration, reviewRegistration, updateGameInfo } from '@game-critics/api-interfaces';
-import { Body, Controller, Delete, Get, HttpException, HttpStatus, Logger, Param, Post, Put } from '@nestjs/common';
+import { gameRegistration, reviewRegistration, updateGameInfo, userInfo, verification } from '@game-critics/api-interfaces';
+import { Headers, Body, Controller, Delete, Get, HttpException, HttpStatus, Logger, Param, Post, Put, Req } from '@nestjs/common';
+import { AuthService } from '../auth/auth.service';
 import { ReviewsService } from '../reviews/reviews.service';
 import { Game } from './game.schema';
 import { GameService } from './game.service';
@@ -8,7 +9,8 @@ import { GameService } from './game.service';
 export class GameController {
   constructor(
     private readonly gameService: GameService,
-    private readonly reviewService: ReviewsService
+    private readonly reviewService: ReviewsService,
+    private readonly authService: AuthService
   ) {}
 
   @Get()
@@ -42,7 +44,9 @@ export class GameController {
   }
 
   @Post(':id/review')
-  async addReviewToGame(@Param('id') gameId: string, @Body() review: reviewRegistration){
+  async addReviewToGame(@Param('id') gameId: string, @Body() review: reviewRegistration, @Headers('Authorization') token){
+    const user: verification = await this.authService.verifyToken(token)
+    review.user_ref = user.id;
     const reviewId = await this.reviewService.createReview(review);
 
     return this.gameService.addReviewToGame(gameId, reviewId);

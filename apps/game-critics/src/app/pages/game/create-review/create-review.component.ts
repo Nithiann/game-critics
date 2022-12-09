@@ -1,6 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { reviewRegistration } from '@game-critics/api-interfaces';
+import { GameService } from '../game.service';
 
 @Component({
   selector: 'game-critics-create-review',
@@ -17,10 +18,14 @@ export class CreateReviewComponent  {
   });
 
   // eslint-disable-next-line @typescript-eslint/no-empty-function
-  constructor(){}
+  constructor(private _service: GameService){}
 
 
   onSubmit(review: reviewRegistration) {
-    console.log(review);
+    console.log('clicked');
+    this._service.addReviewToGame(this.game as string, review)
+    .subscribe((res) => {
+      console.log(res);
+    })
   }
 }

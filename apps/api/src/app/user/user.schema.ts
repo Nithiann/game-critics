@@ -1,6 +1,6 @@
 
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document } from 'mongoose';
+import mongoose, { Document } from 'mongoose';
 import { v4 as uuid } from 'uuid';
 
 enum UserRole {
@@ -63,3 +63,4 @@ export class User {
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);
+mongoose.model('users', UserSchema);

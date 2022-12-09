@@ -8,7 +8,7 @@ export interface credentialsForm {
 export interface verification{
   role: number,
   email: string,
-  _id: string,
+  id: string,
 }
 
 export interface UserIdentity {

@@ -1,6 +1,6 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { credentialsForm, userInfo, userRegistration, verification } from '@game-critics/api-interfaces';
+import { credentialsForm, Token, userInfo, userRegistration, verification } from '@game-critics/api-interfaces';
 import { Observable } from 'rxjs/internal/Observable';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { environment } from '../../environments/environment';
@@ -115,4 +115,14 @@ export class AuthService {
     localStorage.setItem(this.CURRENT_USER, JSON.stringify(user));
   }
 
+  getAuthToken(): string | undefined {
+    const userData = localStorage.getItem(this.CURRENT_USER);
+    if (userData) {
+      const user: Token = JSON.parse(userData);
+
+      console.log('LET OP, TO DO!');
+      return user.token // user.token;
+    }
+    return undefined;
+  }
 }

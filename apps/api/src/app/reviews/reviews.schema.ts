@@ -1,4 +1,6 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
+import mongoose from "mongoose";
+import { Comment } from "../comments/comments.schema";
 
 export type ReviewDocument = Review & Document;
 
@@ -6,7 +8,7 @@ export type ReviewDocument = Review & Document;
 export class Review {
   _id: string;
 
-  @Prop({required: true})
+  @Prop({type: mongoose.Schema.Types.ObjectId, ref: 'users'})
   user_ref: string;
 
   @Prop({required: true})
@@ -15,8 +17,8 @@ export class Review {
   @Prop({required: true, default: new Date()})
   created_at: Date
 
-  @Prop({required: true, default: null})
-  modified_at: Date | null
+  @Prop({required: true, default: new Date()})
+  modified_at: Date
 
   @Prop({required: true, default: 0})
   game_score: number;
@@ -24,7 +26,9 @@ export class Review {
   @Prop({required: true, default: 0})
   review_score: number;
 
-  //comments: [Comments...*]
+  @Prop({type: mongoose.Schema.Types.ObjectId, ref: 'comments'})
+  comments: [Comment]
 }
 
 export const reviewSchema = SchemaFactory.createForClass(Review);
+mongoose.model('reviews', reviewSchema);

@@ -11,7 +11,9 @@ export abstract class CrudService<T, ID> implements CrudOperations<T, ID> {
   constructor(
     protected _http: HttpClient,
     @Inject(String) protected _base: string
-  ) { }
+  ) {
+
+  }
 
   add(t: T): Observable<T> {
     return this._http.post<T>(this._base, t);

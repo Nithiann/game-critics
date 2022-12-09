@@ -6,10 +6,11 @@ import { Review as ReviewModel, ReviewDocument } from './reviews.schema'
 
 @Injectable()
 export class ReviewsService {
-
+  currentUser$: unknown;
   constructor(
     @InjectModel(ReviewModel.name) private reviewModel: Model<ReviewDocument>
-  ){}
+  ){
+  }
 
   async getAll(): Promise<ReviewModel[]> {
     return this.reviewModel.find().exec();

@@ -11,6 +11,7 @@ import { VerifyRoutingModule } from './verify-routing.module';
 import { PasswordModule } from 'primeng/password';
 import { LoginComponent } from './login/login.component';
 import { JwtHelperService, JWT_OPTIONS } from '@auth0/angular-jwt';
+import { httpInterceptorProviders } from './auth.interceptor';
 
 
 @NgModule({
@@ -29,6 +30,7 @@ import { JwtHelperService, JWT_OPTIONS } from '@auth0/angular-jwt';
     AuthService,
     JwtHelperService,
     { provide: JWT_OPTIONS, useValue: JWT_OPTIONS },
+    httpInterceptorProviders
   ],
 })
 export class AuthModule {}

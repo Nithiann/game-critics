@@ -17,6 +17,7 @@ import { RatingModule } from 'primeng/rating';
 import { MultiSelectModule } from 'primeng/multiselect';
 import {InputTextareaModule} from 'primeng/inputtextarea';
 import { CreateReviewComponent } from './create-review/create-review.component';
+import { httpInterceptorProviders } from '../../auth/auth.interceptor';
 
 @NgModule({
   declarations: [
@@ -40,6 +41,6 @@ import { CreateReviewComponent } from './create-review/create-review.component';
     MultiSelectModule,
     InputTextareaModule,
   ],
-  providers: [GameService],
+  providers: [GameService, httpInterceptorProviders],
 })
 export class GamesModule {}

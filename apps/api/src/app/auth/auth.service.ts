@@ -1,12 +1,12 @@
+import { verification } from '@game-critics/api-interfaces';
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { hash, compare } from 'bcrypt';
-import { JwtPayload, verify, sign } from 'jsonwebtoken';
+import { verify, sign } from 'jsonwebtoken';
 import { Model } from 'mongoose';
-import { resolve } from 'path';
 import { User, UserDocument } from '../user/user.schema';
 import { Identity, IdentityDocument } from './identity.schema';
-import { Token } from './token.decorator';
+
 
 @Injectable()
 export class AuthService {
@@ -15,9 +15,10 @@ export class AuthService {
     @InjectModel(User.name) private userModel: Model<UserDocument>
   ) {}
 
-  async verifyToken(token: string) {
+  async verifyToken(token: string): Promise<verification> {
+    const beared = token.replace("Bearer ", "");
     return new Promise((resolve, reject) => {
-      verify(token, process.env.JWT_SECRET, (err, payload) => {
+      verify(beared, process.env.JWT_SECRET, (err, payload) => {
         if (err) reject(err);
         else resolve(payload);
       });

@@ -15,7 +15,9 @@ export class GameService {
     }
 
     async getOne(id): Promise<GameModel> {
-      return this.gameModel.findOne({_id: id}).exec();
+      return await this.gameModel.findOne({_id: id})
+      .populate('reviews');
+
     }
 
     async createGame(gameInfo: gameRegistration): Promise<string> {
@@ -33,10 +35,10 @@ export class GameService {
     }
 
     async addReviewToGame(gameId: string, reviewId: string) {
-      return this.gameModel.findByIdAndUpdate(gameId, {$push: {reviews: {reviewId}}})
+      return this.gameModel.findByIdAndUpdate(gameId, {$push: {reviews: reviewId}})
     }
 
     async removeReviewFromGame(gameId: string, reviewId: string) {
-      return this.gameModel.findByIdAndUpdate(gameId, {$pull: {reviews: {reviewId}}})
+      return this.gameModel.findByIdAndUpdate(gameId, {$pull: {reviews: reviewId}})
     }
   }
