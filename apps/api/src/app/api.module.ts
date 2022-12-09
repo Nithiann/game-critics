@@ -10,6 +10,7 @@ import { AuthService } from './auth/auth.service';
 import { Identity, IdentitySchema } from './auth/identity.schema';
 import { ReviewsService } from './reviews/reviews.service';
 import { Review, reviewSchema } from './reviews/reviews.schema';
+import { Comment, commentSchema } from './comments/comments.schema';
 
 @Module({
   imports: [
@@ -17,7 +18,8 @@ import { Review, reviewSchema } from './reviews/reviews.schema';
       { name: User.name, schema: UserSchema },
       { name: Game.name, schema: GameSchema },
       { name: Identity.name, schema: IdentitySchema},
-      { name: Review.name, schema: reviewSchema }
+      { name: Review.name, schema: reviewSchema },
+      { name: Comment.name, schema: commentSchema}
     ]),
   ],
   controllers: [UserController, GameController],

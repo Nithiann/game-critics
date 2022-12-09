@@ -33,4 +33,12 @@ export class ReviewsService {
   async deleteById(id: string): Promise<void> {
     return this.reviewModel.findByIdAndDelete({_id: id});
   }
+
+  async addCommentToReview(reviewId: string, commentId: string) {
+    return this.reviewModel.findByIdAndUpdate(reviewId, {$push: {comments: commentId}})
+  }
+
+  async removeCommentFromReview(reviewId: string, commentId: string) {
+    return this.reviewModel.findByIdAndUpdate(reviewId, {$pull: {comments: commentId}})
+  }
 }

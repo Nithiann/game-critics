@@ -668,6 +668,16 @@ let ReviewsService = class ReviewsService {
             return this.reviewModel.findByIdAndDelete({ _id: id });
         });
     }
+    addCommentToReview(reviewId, commentId) {
+        return tslib_1.__awaiter(this, void 0, void 0, function* () {
+            return this.reviewModel.findByIdAndUpdate(reviewId, { $push: { comments: commentId } });
+        });
+    }
+    removeCommentFromReview(reviewId, commentId) {
+        return tslib_1.__awaiter(this, void 0, void 0, function* () {
+            return this.reviewModel.findByIdAndUpdate(reviewId, { $pull: { comments: commentId } });
+        });
+    }
 };
 ReviewsService = tslib_1.__decorate([
     (0, common_1.Injectable)(),
@@ -952,6 +962,7 @@ tslib_1.__exportStar(__webpack_require__("./libs/api-interfaces/src/lib/game-int
 tslib_1.__exportStar(__webpack_require__("./libs/api-interfaces/src/lib/review-interfaces.ts"), exports);
 tslib_1.__exportStar(__webpack_require__("./libs/api-interfaces/src/lib/auth-interfaces.ts"), exports);
 tslib_1.__exportStar(__webpack_require__("./libs/api-interfaces/src/lib/id.type.ts"), exports);
+tslib_1.__exportStar(__webpack_require__("./libs/api-interfaces/src/lib/comment-interfaces.ts"), exports);
 
 
 /***/ }),
@@ -966,6 +977,15 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 /***/ }),
 
 /***/ "./libs/api-interfaces/src/lib/auth-interfaces.ts":
+/***/ ((__unused_webpack_module, exports) => {
+
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+
+
+/***/ }),
+
+/***/ "./libs/api-interfaces/src/lib/comment-interfaces.ts":
 /***/ ((__unused_webpack_module, exports) => {
 
 
